@@ -1,0 +1,92 @@
+{
+  "_comment": "OBSERVED evidence read via CxMCP from completed scan c389b5e7-34fc-4be6-821b-59cd647c7f0b of 'cx-andy-schmit/dvwa' in tenant checkmarx-global-services-internal, 2026-08-01.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "cx-andy-schmit/dvwa",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "c389b5e7-34fc-4be6-821b-59cd647c7f0b",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 5,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "CSRF",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/vulnerabilities/captcha/source/low.php",
+            "destinationLine": 50,
+            "similarityId": "4BCo3G3gAni7aAzcVLnCbb++xpg="
+          }
+        ]
+      },
+      {
+        "queryName": "Exposure of Sensitive Information to an Unauthorized Actor",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/dvwa/includes/DBMS/MySQL.php",
+            "destinationLine": 88,
+            "similarityId": "3/YbcHdUmUIGhxgUr09l+gcwZ+Q="
+          }
+        ]
+      },
+      {
+        "queryName": "Missing_HSTS_Header",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/dvwa/includes/dvwaPage.inc.php",
+            "destinationLine": 305,
+            "similarityId": "2W4LMHcT/vSld6tCtqrQExOCVcU="
+          }
+        ]
+      },
+      {
+        "queryName": "Improper_Exception_Handling",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/login.php",
+            "destinationLine": 40,
+            "similarityId": "d77SUqnw0wzXqYjeIVARjEytQPI="
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/vulnerabilities/sqli/source/low.php",
+            "destinationLine": 35,
+            "similarityId": "EdyXCoeD22Z/MViCkGTdzWwMps8="
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

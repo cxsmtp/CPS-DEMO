@@ -1,0 +1,32 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "serialNumber": "urn:uuid:cps-ch002-aiweap-fixture",
+  "metadata": {
+    "timestamp": "2026-05-08T18:00:00Z",
+    "tools": [{"vendor": "Checkmarx", "name": "AISC", "version": "2026.04"}],
+    "component": {
+      "type": "application",
+      "name": "CH002_ai_weaponised_recon",
+      "version": "0.1.0",
+      "purl": "pkg:project/CH002_ai_weaponised_recon@0.1.0"
+    }
+  },
+  "components": [
+    {
+      "type": "machine-learning-model",
+      "name": "GPT-4o",
+      "supplier": {"name": "OpenAI"},
+      "purl": "pkg:openai/gpt-4o",
+      "properties": [
+        {"name": "ProjectName", "value": "CH002_ai_weaponised_recon"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {"location": "lab_app/chains/CH002_ai_weaponised_recon/src/app/ai_agent.py:38"}
+        ]
+      }
+    }
+  ]
+}

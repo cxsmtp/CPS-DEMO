@@ -1,0 +1,27 @@
+{
+  "name": "cps-ch002-node-lab",
+  "version": "0.2.0",
+  "description": "CH-002 lab — minimal Node.js. Two pinned vulnerable npm libraries (cookie + debug) for SCA chain participants. No Express, no HTTP server, no input handling — SAST scanner has nothing to flag. CPS_LAB_ENVIRONMENT=1 required to run.",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "_design_notes": {
+    "_format": "v0.2 strips Express entirely. Previous v0.1 (Express 4.21.0) pulled vulnerable transitives that rated High in the test tenant (path-to-regexp x2, semver). v0.2 carries only cookie + debug as direct dependencies, both confirmed Low/Medium-Low in tenant scan of v0.1.",
+    "cookie@0.6.0": {
+      "advisory": "GHSA-pxg6-pf52-xh8x (CVE-2024-47764) — out-of-bounds characters in cookie name/path/domain",
+      "tenant_rating_observed": "5.3 (orange-band; treated as Low by tenant grouping)",
+      "substitute_if_zero_or_high": "if cookie returns no SCA finding, substitute @types/cookie or jsonwebtoken older version"
+    },
+    "debug@2.6.9": {
+      "advisory": "Cx8bc4df28-fcf5 — internal Checkmarx ID for ReDoS class",
+      "tenant_rating_observed": "3.7 (Low; gray-band confirmed)",
+      "substitute_if_zero_or_high": "ms@2.0.0 if debug returns no SCA finding"
+    }
+  },
+  "dependencies": {
+    "cookie": "0.6.0",
+    "debug": "2.6.9"
+  }
+}

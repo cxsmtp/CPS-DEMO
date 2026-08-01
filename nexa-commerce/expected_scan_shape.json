@@ -1,0 +1,596 @@
+{
+  "_comment": "EXPECTED-shape fixture for the Nexa Commerce repository. This is NOT a scan result. It is generated from chains_index_nexa.json to dry-run verify_chains.py and prove the per-service scoping resolves. It proves the harness and catalog are consistent; it does NOT prove Checkmarx will emit these findings. Only a real scan does that.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "Nexa-Commerce",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "expected-dryrun",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 39,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "Use of Insufficiently Random Values",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/storefront/public/lib/session.php",
+            "destinationLine": 11,
+            "similarityId": "exp-1"
+          }
+        ]
+      },
+      {
+        "queryName": "Broken_or_Risky_Hashing_Function",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/storefront/public/lib/session.php",
+            "destinationLine": 12,
+            "similarityId": "exp-2"
+          }
+        ]
+      },
+      {
+        "queryName": "Insecure_Value_of_the_SameSite_Cookie_Attribute",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/storefront/public/lib/session.php",
+            "destinationLine": 13,
+            "similarityId": "exp-3"
+          }
+        ]
+      },
+      {
+        "queryName": "Cookie_Overly_Broad_Path",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/storefront/public/lib/session.php",
+            "destinationLine": 14,
+            "similarityId": "exp-4"
+          }
+        ]
+      },
+      {
+        "queryName": "Use_of_Non_Cryptographic_Random",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/storefront/public/lib/session.php",
+            "destinationLine": 15,
+            "similarityId": "exp-5"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_Query_String",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/AccountServlet.java",
+            "destinationLine": 16,
+            "similarityId": "exp-6"
+          }
+        ]
+      },
+      {
+        "queryName": "Exposure of Sensitive Information to an Unauthorized Actor",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/AccountServlet.java",
+            "destinationLine": 17,
+            "similarityId": "exp-7"
+          }
+        ]
+      },
+      {
+        "queryName": "Privacy_Violation",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/AccountServlet.java",
+            "destinationLine": 18,
+            "similarityId": "exp-8"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/AccountServlet.java",
+            "destinationLine": 19,
+            "similarityId": "exp-9"
+          }
+        ]
+      },
+      {
+        "queryName": "Heap_Inspection",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/AccountServlet.java",
+            "destinationLine": 20,
+            "similarityId": "exp-10"
+          }
+        ]
+      },
+      {
+        "queryName": "External_Control_of_System_or_Config_Setting",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/ReportBuilder.java",
+            "destinationLine": 21,
+            "similarityId": "exp-11"
+          }
+        ]
+      },
+      {
+        "queryName": "Parameter_Tampering",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/ReportBuilder.java",
+            "destinationLine": 22,
+            "similarityId": "exp-12"
+          }
+        ]
+      },
+      {
+        "queryName": "Stored_Relative_Path_Traversal",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/ReportBuilder.java",
+            "destinationLine": 23,
+            "similarityId": "exp-13"
+          }
+        ]
+      },
+      {
+        "queryName": "Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/ReportBuilder.java",
+            "destinationLine": 24,
+            "similarityId": "exp-14"
+          }
+        ]
+      },
+      {
+        "queryName": "Race_Condition",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/ReportBuilder.java",
+            "destinationLine": 25,
+            "similarityId": "exp-15"
+          }
+        ]
+      },
+      {
+        "queryName": "Open_Redirect",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/web-gateway/src/server.js",
+            "destinationLine": 26,
+            "similarityId": "exp-16"
+          }
+        ]
+      },
+      {
+        "queryName": "Missing_HSTS_Header",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/web-gateway/src/server.js",
+            "destinationLine": 27,
+            "similarityId": "exp-17"
+          }
+        ]
+      },
+      {
+        "queryName": "Missing_CSP_Header",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/web-gateway/src/server.js",
+            "destinationLine": 28,
+            "similarityId": "exp-18"
+          }
+        ]
+      },
+      {
+        "queryName": "Unsafe_Use_Of_Target_blank",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/web-gateway/src/server.js",
+            "destinationLine": 29,
+            "similarityId": "exp-19"
+          }
+        ]
+      },
+      {
+        "queryName": "Log_Forging",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/web-gateway/src/server.js",
+            "destinationLine": 30,
+            "similarityId": "exp-20"
+          }
+        ]
+      },
+      {
+        "queryName": "Use_Of_Hardcoded_Password",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/ops/seed/seed.js",
+            "destinationLine": 31,
+            "similarityId": "exp-21"
+          }
+        ]
+      },
+      {
+        "queryName": "Dynamic_SQL_Queries",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/InventoryDao.java",
+            "destinationLine": 36,
+            "similarityId": "exp-26"
+          }
+        ]
+      },
+      {
+        "queryName": "Insufficient_Logging_of_Database_Actions",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/InventoryDao.java",
+            "destinationLine": 37,
+            "similarityId": "exp-27"
+          }
+        ]
+      },
+      {
+        "queryName": "Pages_Without_Global_Error_Handler",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/InventoryDao.java",
+            "destinationLine": 38,
+            "similarityId": "exp-28"
+          }
+        ]
+      },
+      {
+        "queryName": "Unchecked_Error_Condition",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/InventoryDao.java",
+            "destinationLine": 39,
+            "similarityId": "exp-29"
+          }
+        ]
+      },
+      {
+        "queryName": "Use_of_System_Output_Stream",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/catalog-service/src/main/java/com/nexa/catalog/InventoryDao.java",
+            "destinationLine": 40,
+            "similarityId": "exp-30"
+          }
+        ]
+      },
+      {
+        "queryName": "Object_Access_Violation",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/assistant-service/src/agents/tool.py",
+            "destinationLine": 41,
+            "similarityId": "exp-31"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/assistant-service/src/agents/mcp/util.py",
+            "destinationLine": 42,
+            "similarityId": "exp-32"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/assistant-service/src/agents/run_internal/tool_actions.py",
+            "destinationLine": 43,
+            "similarityId": "exp-33"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/assistant-service/src/agents/run_internal/session_persistence.py",
+            "destinationLine": 44,
+            "similarityId": "exp-34"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/assistant-service/src/agents/tracing/provider.py",
+            "destinationLine": 45,
+            "similarityId": "exp-35"
+          }
+        ]
+      },
+      {
+        "queryName": "CSRF",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/storefront/public/lib/db.php",
+            "destinationLine": 46,
+            "similarityId": "exp-36"
+          }
+        ]
+      },
+      {
+        "queryName": "Exposure of Sensitive Information to an Unauthorized Actor",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/storefront/public/lib/db.php",
+            "destinationLine": 47,
+            "similarityId": "exp-37"
+          }
+        ]
+      },
+      {
+        "queryName": "Missing_HSTS_Header",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/storefront/public/lib/db.php",
+            "destinationLine": 48,
+            "similarityId": "exp-38"
+          }
+        ]
+      },
+      {
+        "queryName": "Improper_Exception_Handling",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/storefront/public/lib/db.php",
+            "destinationLine": 49,
+            "similarityId": "exp-39"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/storefront/public/lib/db.php",
+            "destinationLine": 50,
+            "similarityId": "exp-40"
+          }
+        ]
+      },
+      {
+        "queryName": "Use_of_Hardcoded_Password",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/auth-service/main.go",
+            "destinationLine": 56,
+            "similarityId": "exp-46"
+          }
+        ]
+      },
+      {
+        "queryName": "Client_Weak_Cryptographic_Hash",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/auth-service/main.go",
+            "destinationLine": 57,
+            "similarityId": "exp-47"
+          }
+        ]
+      },
+      {
+        "queryName": "JWT_No_Claims_Directives_Validation",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/auth-service/main.go",
+            "destinationLine": 58,
+            "similarityId": "exp-48"
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 9,
+    "severitiesBreakdown": [],
+    "technology": [
+      {
+        "name": "Mixed",
+        "queries": [
+          {
+            "queryName": "Container Capabilities Unrestricted",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/docker-compose.yml",
+                "resultId": "exp-22"
+              }
+            ]
+          },
+          {
+            "queryName": "Security Opt Not Set",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/docker-compose.yml",
+                "resultId": "exp-23"
+              }
+            ]
+          },
+          {
+            "queryName": "Container Traffic Not Bound To Host Interface",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/docker-compose.yml",
+                "resultId": "exp-24"
+              }
+            ]
+          },
+          {
+            "queryName": "Healthcheck Instruction Missing",
+            "resultsList": [
+              {
+                "severity": "Low",
+                "fileName": "/ops/seed/seed.js",
+                "resultId": "exp-25"
+              }
+            ]
+          },
+          {
+            "queryName": "IAM policy allows for data exfiltration",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/deploy/terraform/iam.tf",
+                "resultId": "exp-41"
+              }
+            ]
+          },
+          {
+            "queryName": "S3 Bucket Logging Disabled",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/deploy/terraform/iam.tf",
+                "resultId": "exp-42"
+              }
+            ]
+          },
+          {
+            "queryName": "RDS Without Logging",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/deploy/terraform/iam.tf",
+                "resultId": "exp-43"
+              }
+            ]
+          },
+          {
+            "queryName": "RDS With Backup Disabled",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/deploy/terraform/iam.tf",
+                "resultId": "exp-44"
+              }
+            ]
+          },
+          {
+            "queryName": "Using Unrecommended Namespace",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/deploy/k8s/deployment.yaml",
+                "resultId": "exp-45"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

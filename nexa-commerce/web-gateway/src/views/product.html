@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Nexa Commerce</title>
+  <style>
+    body{font-family:system-ui,sans-serif;margin:2rem;max-width:56rem}
+    table{border-collapse:collapse;width:100%}
+    td,th{border:1px solid #ddd;padding:.5rem;text-align:left}
+  </style>
+</head>
+<body>
+  <h1>Nexa Commerce</h1>
+  <table>
+    <tr><th>SKU</th><th>Product</th><th>Price</th></tr>
+    {{ROWS}}
+  </table>
+
+  <!--
+    CH-104 F4 - Unsafe_Use_Of_Target_blank (expect: Low)
+
+    These links open in a new browsing context without rel="noopener".
+    The opened page receives a live window.opener handle back to this
+    document and can navigate it, which is the reverse-tabnabbing step
+    that turns the open redirect above into a credential capture.
+  -->
+  <p>
+    <a href="https://partners.nexa.example/shipping" target="_blank">Shipping partners</a>
+    &middot;
+    <a href="https://reviews.nexa.example/latest" target="_blank">Customer reviews</a>
+  </p>
+
+  <p><a href="/signin/complete?return_to=/product">Continue signing in</a></p>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "cps-ch004-redirect-token-exfil-lab",
+  "version": "0.1.0",
+  "description": "CH-004 lab. Deliberately weak OAuth callback handling. Zero dependencies by design so the SCA surface is empty and the chain is purely SAST composition.",
+  "private": true,
+  "main": "src/server.js",
+  "scripts": { "start": "node src/server.js" },
+  "dependencies": {}
+}

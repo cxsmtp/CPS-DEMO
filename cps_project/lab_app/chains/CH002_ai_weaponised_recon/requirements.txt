@@ -1,0 +1,14 @@
+# CH-002 lab — pinned deliberately-vulnerable Python dependencies
+# ================================================================
+#
+# F4 SCA chain participant: Flask 2.0.1
+#   - CVE-2026-27205 confirmed Low (2.3) in tenant scan
+#   - This is the disclosed dependency that AI agent F5 cross-references
+#     against advisory DBs once F1/F2 leaked the version
+#
+# Bonus SCA target: requests 2.25.1
+#   - May surface additional Low advisories; if it surfaces Mediums/Highs
+#     they're peripheral findings, not chain participants
+
+Flask==2.0.1
+requests==2.25.1

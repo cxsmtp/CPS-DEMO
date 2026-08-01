@@ -1,0 +1,92 @@
+{
+  "_comment": "OBSERVED evidence read via CxMCP from completed scan 382c4fa6-5687-4b5a-8205-6ca91269c0fa of 'cx-carolyn-yates/JavaVulnerableLab' in tenant checkmarx-global-services-internal, 2026-08-01.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "cx-carolyn-yates/JavaVulnerableLab",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "382c4fa6-5687-4b5a-8205-6ca91269c0fa",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 5,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "Dynamic_SQL_Queries",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/LoginValidator.java",
+            "destinationLine": 52,
+            "similarityId": "0XBp02QSHGEql4giNp73keCA3Es="
+          }
+        ]
+      },
+      {
+        "queryName": "Insufficient_Logging_of_Database_Actions",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/src/main/webapp/vulnerability/idor/change-email.jsp",
+            "destinationLine": 32,
+            "similarityId": "12jj98OpDWTFsrU0lpG1XUagp/Y="
+          }
+        ]
+      },
+      {
+        "queryName": "Pages_Without_Global_Error_Handler",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/src/main/webapp/admin/admin.jsp",
+            "destinationLine": 1,
+            "similarityId": "0tZuTNbFjEN8ykwCCIAbRU3KNJA="
+          }
+        ]
+      },
+      {
+        "queryName": "Unchecked_Error_Condition",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/Logout.java",
+            "destinationLine": 42,
+            "similarityId": "3iWHH6gMkWJLKli9QiunyCCQIG0="
+          }
+        ]
+      },
+      {
+        "queryName": "Use_of_System_Output_Stream",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Information",
+            "destinationFileName": "/src/main/webapp/vulnerability/DisplayMessage.jsp",
+            "destinationLine": 35,
+            "similarityId": "0APbv9DRr/LUAZserU2/2fSPWus="
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

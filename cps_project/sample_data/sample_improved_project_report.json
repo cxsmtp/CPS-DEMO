@@ -1,0 +1,173 @@
+{
+  "reportCreationDate": "2026-04-30T11:06:08.961160629+04:00",
+  "reportType": "Improved Project Report",
+  "header": {
+    "tenantId": "REDACTED-FOR-SAMPLE",
+    "timezone": "Asia/Dubai",
+    "severityDistribution": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 4},
+      {"level": "Information", "value": 0},
+      {"level": "Low", "value": 8}
+    ]
+  },
+  "projectsOverview": {
+    "numberOfProjects": 1,
+    "projectsList": [
+      {
+        "projectName": "CH01_Lab",
+        "projectId": "REDACTED-FOR-SAMPLE",
+        "severityDistribution": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 4},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 8}
+        ]
+      }
+    ]
+  },
+  "bySeverity": {
+    "totalResults": 12,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0, "percentage": 0},
+      {"level": "High", "value": 0, "percentage": 0},
+      {"level": "Medium", "value": 4, "percentage": 33.33},
+      {"level": "Low", "value": 8, "percentage": 66.67},
+      {"level": "Information", "value": 0, "percentage": 0}
+    ]
+  },
+  "byScanner": {
+    "totalResults": 12,
+    "scannersDistribution": [
+      {"scannerName": "SAST", "numberOfResults": 12, "percentage": 100}
+    ]
+  },
+  "languageOverview": [
+    {
+      "languageName": "python",
+      "totalResults": 12,
+      "severityBreakdown": [
+        {"level": "Critical", "value": 0},
+        {"level": "High", "value": 0},
+        {"level": "Medium", "value": 4},
+        {"level": "Information", "value": 0},
+        {"level": "Low", "value": 8}
+      ]
+    }
+  ],
+  "topTenVulnerableFiles": [
+    {
+      "fileName": "/lab_app_CH01/app/routes/supporting.py",
+      "totalCount": 6,
+      "severityDistribution": [
+        {"level": "Medium", "value": 3},
+        {"level": "Low", "value": 3}
+      ]
+    },
+    {
+      "fileName": "/lab_app_CH01/app/main.py",
+      "totalCount": 1,
+      "severityDistribution": [{"level": "Medium", "value": 1}]
+    },
+    {
+      "fileName": "/lab_app_CH01/app/auth/session_handler.py",
+      "totalCount": 5,
+      "severityDistribution": [{"level": "Low", "value": 5}]
+    }
+  ],
+  "topTenVulnerabilityType": {
+    "vulnerabilitiesList": [
+      {
+        "vulnerabilityType": "Use_Of_Hardcoded_Password",
+        "total": 2,
+        "scanner": "SAST",
+        "vulnerabilitySeverities": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 2},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 0}
+        ]
+      },
+      {
+        "vulnerabilityType": "Open_Redirect",
+        "total": 1,
+        "scanner": "SAST",
+        "vulnerabilitySeverities": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 1},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 0}
+        ]
+      },
+      {
+        "vulnerabilityType": "Secure_Cookie_Flag_Not_Set_In_Config",
+        "total": 1,
+        "scanner": "SAST",
+        "vulnerabilitySeverities": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 1},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 0}
+        ]
+      },
+      {
+        "vulnerabilityType": "Trust_Boundary_Violation_in_Session_Variables",
+        "total": 5,
+        "scanner": "SAST",
+        "vulnerabilitySeverities": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 0},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 5}
+        ]
+      },
+      {
+        "vulnerabilityType": "Cookie_Poisoning",
+        "total": 1,
+        "scanner": "SAST",
+        "vulnerabilitySeverities": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 0},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 1}
+        ]
+      },
+      {
+        "vulnerabilityType": "Log_Forging",
+        "total": 1,
+        "scanner": "SAST",
+        "vulnerabilitySeverities": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 0},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 1}
+        ]
+      },
+      {
+        "vulnerabilityType": "Missing_Content_Security_Policy",
+        "total": 1,
+        "scanner": "SAST",
+        "vulnerabilitySeverities": [
+          {"level": "Critical", "value": 0},
+          {"level": "High", "value": 0},
+          {"level": "Medium", "value": 0},
+          {"level": "Information", "value": 0},
+          {"level": "Low", "value": 1}
+        ]
+      }
+    ]
+  },
+  "scannedFiles": [
+    {"fileName": "/lab_app_CH01/app/auth/session_handler.py", "vulnerabilityCount": 5},
+    {"fileName": "/lab_app_CH01/app/main.py", "vulnerabilityCount": 1},
+    {"fileName": "/lab_app_CH01/app/routes/supporting.py", "vulnerabilityCount": 6}
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "_comment": "OBSERVED evidence read via CxMCP from completed scan 5797794c-4ea0-4553-a883-c908a6fec287 of 'AISC_openai_agents_python' in tenant checkmarx-global-services-internal, 2026-08-01.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "AISC_openai_agents_python",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "5797794c-4ea0-4553-a883-c908a6fec287",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 5,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "Object_Access_Violation",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/src/agents/tool.py",
+            "destinationLine": 1284,
+            "similarityId": "p9H+6K7MHD/gKWBQ699t5SEO4Pw="
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/agents/mcp/util.py",
+            "destinationLine": 296,
+            "similarityId": "gPZSEBzeEMW5I9wlkSoHqZvh4eQ="
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/agents/run_internal/tool_actions.py",
+            "destinationLine": 130,
+            "similarityId": "FRtCxgpOBDPuQtV+qNVxGbJ97BQ="
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/agents/run_internal/session_persistence.py",
+            "destinationLine": 479,
+            "similarityId": "NwUJPu9T7HKfoPXIvLPqn011OpM="
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/agents/tracing/provider.py",
+            "destinationLine": 95,
+            "similarityId": "32+Yo0mzZGU30FIJH3+Qi0oLngA="
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

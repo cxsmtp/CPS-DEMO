@@ -1,0 +1,62 @@
+# LAB IaC ARTIFACT — Kubernetes deployment for CH-A1 (prompt-template tampering)
+# Deliberate misconfigurations marked LAB-IAC-VULN-CHA1-N.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cps-lab-cha1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cha1-llm-workflow
+  namespace: cps-lab-cha1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cha1-llm-workflow
+  template:
+    metadata:
+      labels:
+        app: cha1-llm-workflow
+    spec:
+      # LAB-IAC-VULN-CHA1-K8S-1: KICS Service Account Token Automount (Low)
+      automountServiceAccountToken: true
+      containers:
+      - name: workflow
+        image: cha1-llm-workflow:0.1.0
+        ports:
+        - containerPort: 5050
+        env:
+        - name: CPS_LAB_ENVIRONMENT
+          value: "1"
+        # LAB-IAC-VULN-CHA1-K8S-2: Container CPU/Memory limits not set (Low)
+        # LAB-IAC-VULN-CHA1-K8S-3: Container without security context (Low)
+        # LAB-IAC-VULN-CHA1-K8S-4: KICS Privilege Escalation Allowed (no
+        #     allowPrivilegeEscalation:false) (Low/Medium per KICS)
+        volumeMounts:
+        # LAB-IAC-VULN-CHA1-K8S-F3: writable volume mount on the prompt
+        # directory. This is the chain's L3 Amplifier — combined with
+        # F1 (path traversal) it lets attacker overwrite system_prompt.txt.
+        # KICS rule "Volume Mount With OS Directory Read Write" or
+        # equivalent should fire here.
+        - name: prompt-templates
+          mountPath: /app/prompts
+          readOnly: false  # LAB-IAC-VULN-CHA1-K8S-F3
+      volumes:
+      - name: prompt-templates
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cha1-llm-svc
+  namespace: cps-lab-cha1
+spec:
+  selector:
+    app: cha1-llm-workflow
+  ports:
+  - port: 80
+    targetPort: 5050
+  type: ClusterIP

@@ -1,0 +1,114 @@
+{
+  "_comment": "DRY-RUN fixture for compare_predictions.py. Deliberately includes one severity drift (Missing HSTS Header -> Low) and one miss (Use Of HTTP Sensitive Data Exposure absent) to prove the comparison reports honestly.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "CH003_CH004_labs",
+    "scanners": [
+      "SAST"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "dryrun",
+    "totalScannedLoc": 220,
+    "scannedLoc": 220,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 7,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "HttpOnly Cookie Flag Not Set",
+        "cweId": 1004,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/lab_app/chains/CH003_session_forgery/src/server.js",
+            "destinationLine": 44,
+            "similarityId": "HttpOnly Cookie Flag Not Set-44"
+          }
+        ]
+      },
+      {
+        "queryName": "Use of Insufficiently Random Values",
+        "cweId": 330,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/lab_app/chains/CH003_session_forgery/src/session.js",
+            "destinationLine": 30,
+            "similarityId": "Use of Insufficiently Random Values-30"
+          }
+        ]
+      },
+      {
+        "queryName": "Client Weak Cryptographic Hash",
+        "cweId": 327,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/lab_app/chains/CH003_session_forgery/src/session.js",
+            "destinationLine": 41,
+            "similarityId": "Client Weak Cryptographic Hash-41"
+          }
+        ]
+      },
+      {
+        "queryName": "Secret Leak in Error Messages",
+        "cweId": 209,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/lab_app/chains/CH003_session_forgery/src/session.js",
+            "destinationLine": 60,
+            "similarityId": "Secret Leak in Error Messages-60"
+          }
+        ]
+      },
+      {
+        "queryName": "Open Redirect",
+        "cweId": 601,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/lab_app/chains/CH004_redirect_token_exfil/src/server.js",
+            "destinationLine": 47,
+            "similarityId": "Open Redirect-47"
+          }
+        ]
+      },
+      {
+        "queryName": "Information Exposure Through Headers",
+        "cweId": 200,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/lab_app/chains/CH004_redirect_token_exfil/src/oauth_callback.js",
+            "destinationLine": 25,
+            "similarityId": "Information Exposure Through Headers-25"
+          }
+        ]
+      },
+      {
+        "queryName": "Missing HSTS Header",
+        "cweId": 319,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/lab_app/chains/CH004_redirect_token_exfil/src/oauth_callback.js",
+            "destinationLine": 26,
+            "similarityId": "Missing HSTS Header-26"
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

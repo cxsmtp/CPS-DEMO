@@ -1,0 +1,166 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.7",
+  "serialNumber": "urn:uuid:cha1-fixture-do-not-use-1234567890ab",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-05-03T16:30:00Z",
+    "tools": {
+      "services": [
+        {
+          "provider": {
+            "name": "Checkmarx",
+            "url": ["https://checkmarx.com/"],
+            "bom-ref": "Checkmarx"
+          },
+          "name": "Checkmarx AI Supply Chain"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:GPT-4o",
+      "supplier": {"name": "OpenAI"},
+      "name": "GPT-4o",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/openai_gpt4o.py", "line": 23, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:GPT-4o-mini",
+      "supplier": {"name": "OpenAI"},
+      "name": "gpt-4o-mini",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/openai_gpt4o_mini.py", "line": 14, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:Claude-3.5-Sonnet",
+      "supplier": {"name": "Anthropic"},
+      "name": "claude-3-5-sonnet-20241022",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/anthropic_sonnet.py", "line": 13, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:Gemini-1.5-Pro",
+      "supplier": {"name": "Google"},
+      "name": "gemini-1.5-pro",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/google_gemini.py", "line": 13, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:Llama-3.1-70B",
+      "supplier": {"name": "Meta"},
+      "name": "Llama 3.1 70B Instruct",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/meta_llama_bedrock.py", "line": 16, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:Mistral-Large",
+      "supplier": {"name": "Mistral AI"},
+      "name": "Mistral Large",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/mistral_large.py", "line": 13, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:Command-R-Plus",
+      "supplier": {"name": "Cohere"},
+      "name": "Command R+",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/cohere_command.py", "line": 13, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "library",
+      "bom-ref": "ai-agent:LangChain",
+      "supplier": {"name": "langchain-ai"},
+      "name": "LangChain",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/langchain_agent.py", "line": 11, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "library",
+      "bom-ref": "ai-agent:Google ADK",
+      "supplier": {"name": "Google"},
+      "name": "Google ADK",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/google_adk_agent.py", "line": 12, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "library",
+      "bom-ref": "ai-vector-db:Pinecone",
+      "supplier": {"name": "Pinecone"},
+      "name": "Pinecone",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "CHA1_prompt_template_tampering"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "src/llm_workflow/agents/pinecone_rag.py", "line": 12, "offset": 14}
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model:UNRELATED-other-project",
+      "supplier": {"name": "OpenAI"},
+      "name": "GPT-3.5-turbo",
+      "version": "",
+      "properties": [{"name": "ProjectName", "value": "some-other-project-do-not-include"}],
+      "evidence": {
+        "occurrences": [
+          {"location": "other-repo/some_file.py", "line": 1, "offset": 1}
+        ]
+      }
+    }
+  ]
+}

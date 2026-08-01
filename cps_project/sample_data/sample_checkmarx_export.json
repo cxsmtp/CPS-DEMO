@@ -1,0 +1,163 @@
+{
+  "scanId": "lab-scan-0001",
+  "projectId": "cps-lab-app",
+  "totalCount": 12,
+  "results": [
+    {
+      "id": "SIM-1001",
+      "similarityId": "SIM-1001",
+      "severity": "Low",
+      "data": {
+        "queryName": "Open_Redirect",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/auth/views.py", "line": 42}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 601}
+    },
+    {
+      "id": "SIM-1002",
+      "similarityId": "SIM-1002",
+      "severity": "Low",
+      "data": {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/errors.py", "line": 17}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 209}
+    },
+    {
+      "id": "SIM-1003",
+      "similarityId": "SIM-1003",
+      "severity": "Low",
+      "data": {
+        "queryName": "Trust_Boundary_Violation_in_Session_Variables",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/session.py", "line": 88}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 501}
+    },
+    {
+      "id": "SIM-1004",
+      "similarityId": "SIM-1004",
+      "severity": "Low",
+      "data": {
+        "queryName": "URL_Canonicalization_Issue",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/routes.py", "line": 14}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 647}
+    },
+    {
+      "id": "SIM-1005",
+      "similarityId": "SIM-1005",
+      "severity": "Low",
+      "data": {
+        "queryName": "Use_of_Insufficiently_Random_Values",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/tokens.py", "line": 9}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 330}
+    },
+    {
+      "id": "SIM-1006",
+      "similarityId": "SIM-1006",
+      "severity": "Low",
+      "data": {
+        "queryName": "Information_Exposure_via_Headers",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/middleware.py", "line": 21}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 200}
+    },
+    {
+      "id": "SIM-1007",
+      "similarityId": "SIM-1007",
+      "severity": "Low",
+      "data": {
+        "queryName": "Log_Forging",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/logger.py", "line": 55}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 117}
+    },
+    {
+      "id": "SIM-1008",
+      "similarityId": "SIM-1008",
+      "severity": "Low",
+      "data": {
+        "queryName": "HttpOnly_Cookie_Flag_Not_Set",
+        "languageName": "JavaScript",
+        "nodes": [
+          {"fileName": "public/cookies.js", "line": 12}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 614}
+    },
+    {
+      "id": "SIM-1009",
+      "similarityId": "SIM-1009",
+      "severity": "Low",
+      "data": {
+        "queryName": "Use_of_Hardcoded_Password",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/db.py", "line": 3}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 259}
+    },
+    {
+      "id": "SIM-2001",
+      "similarityId": "SIM-2001",
+      "severity": "High",
+      "data": {
+        "queryName": "SQL_Injection",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/queries.py", "line": 77}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 89}
+    },
+    {
+      "id": "SIM-2002",
+      "similarityId": "SIM-2002",
+      "severity": "High",
+      "data": {
+        "queryName": "Reflected_XSS",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "app/render.py", "line": 33}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 79}
+    },
+    {
+      "id": "SIM-1010",
+      "similarityId": "SIM-1010",
+      "severity": "Low",
+      "data": {
+        "queryName": "Compromised_CDN",
+        "languageName": "Python",
+        "nodes": [
+          {"fileName": "public/index.html", "line": 4}
+        ]
+      },
+      "vulnerabilityDetails": {"cweId": 0}
+    }
+  ]
+}

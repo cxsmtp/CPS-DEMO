@@ -1,0 +1,14 @@
+# Checkmarx One scan exclusions for CH-002 Node lab.
+#
+# Excludes node_modules from SAST scanning. The dependency code lives
+# there but is not application code; SAST findings on transitives are
+# noise that obscure the lab's deliberate vulnerabilities.
+#
+# Note: this file is read by some Checkmarx versions but not all.
+# In the Checkmarx One UI, configure path exclusions explicitly:
+#   Project Settings -> Scan Configuration -> Source Exclusions
+#   Add: **/node_modules/**
+
+node_modules/
+**/node_modules/**
+package-lock.json

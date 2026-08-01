@@ -1,0 +1,68 @@
+{
+  "_comment": "OBSERVED evidence read via CxMCP from completed scan 2e83d245-5417-4076-a24e-34622e6fd073 of 'cx-jeremy-polansky/authlab-canary' in tenant checkmarx-global-services-internal, 2026-08-01.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "cx-jeremy-polansky/authlab-canary",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "2e83d245-5417-4076-a24e-34622e6fd073",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 3,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "Use_of_Hardcoded_Password",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/app/controllers/app.go",
+            "destinationLine": 213,
+            "similarityId": "0Bq5qFb+uLA1haKPGSpCur2jTAM="
+          }
+        ]
+      },
+      {
+        "queryName": "Client_Weak_Cryptographic_Hash",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/public/js/clientside.js",
+            "destinationLine": 113,
+            "similarityId": "dDFtmyvQUkjW8MvNhYJFe1jcEMI="
+          }
+        ]
+      },
+      {
+        "queryName": "JWT_No_Claims_Directives_Validation",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/app/controllers/app.go",
+            "destinationLine": 396,
+            "similarityId": "d8VLX0/ssa9zVdKaddCJrd6Lklo="
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

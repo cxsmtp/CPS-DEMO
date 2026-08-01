@@ -1,0 +1,87 @@
+{
+  "_comment": "OBSERVED evidence read via CxMCP from completed scan b0b1dcd6-4cdc-4a3e-bb66-f689ec8e4999 of 'owasp-juice-lab' in tenant checkmarx-global-services-internal, 2026-08-01.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "owasp-juice-lab",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "b0b1dcd6-4cdc-4a3e-bb66-f689ec8e4999",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "resultsList": []
+  },
+  "iacScanResults": {
+    "totalResults": 5,
+    "severitiesBreakdown": [],
+    "technology": [
+      {
+        "name": "Terraform",
+        "queries": [
+          {
+            "queryName": "IAM policy allows for data exfiltration",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/terraform/iam.tf",
+                "resultId": "+cWUkE7MhVo3DkGLtob6BXUj170="
+              }
+            ]
+          },
+          {
+            "queryName": "S3 Bucket Logging Disabled",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/terraform/s3.tf",
+                "resultId": "WJLKWg3/3bbFGgwtObNBALFUr80="
+              }
+            ]
+          },
+          {
+            "queryName": "RDS Without Logging",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/terraform/rds.tf",
+                "resultId": "4ExYdis3eWtB5PiJRYcz0Tdyk84="
+              }
+            ]
+          },
+          {
+            "queryName": "RDS With Backup Disabled",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/terraform/rds.tf",
+                "resultId": "h/70jVGCxBzxMlBzM360MISgzp4="
+              }
+            ]
+          },
+          {
+            "queryName": "Using Unrecommended Namespace",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/kubernetes/deployment.yaml",
+                "resultId": "Ojwf0eSDnF/hKou1A1UO7S4L3/c="
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}
