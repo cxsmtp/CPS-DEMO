@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Checkmarx",
+          "version": "9.7.0",
+          "rules": [
+            {"id": "Open_Redirect", "properties": {"cwe": "CWE-601"}},
+            {"id": "Trust_Boundary_Violation_in_Session_Variables", "properties": {"cwe": "CWE-501"}},
+            {"id": "URL_Canonicalization_Issue", "properties": {"cwe": "CWE-647"}},
+            {"id": "Use_of_Insufficiently_Random_Values", "properties": {"cwe": "CWE-330"}},
+            {"id": "Information_Exposure_via_Headers", "properties": {"cwe": "CWE-200"}}
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "Open_Redirect",
+          "level": "note",
+          "locations": [{"physicalLocation": {"artifactLocation": {"uri": "app/auth/views.py"}, "region": {"startLine": 42}}}],
+          "fingerprints": {"primary": "SARIF-1"}
+        },
+        {
+          "ruleId": "Trust_Boundary_Violation_in_Session_Variables",
+          "level": "note",
+          "locations": [{"physicalLocation": {"artifactLocation": {"uri": "app/session.py"}, "region": {"startLine": 88}}}],
+          "fingerprints": {"primary": "SARIF-2"}
+        },
+        {
+          "ruleId": "URL_Canonicalization_Issue",
+          "level": "note",
+          "locations": [{"physicalLocation": {"artifactLocation": {"uri": "app/routes.py"}, "region": {"startLine": 14}}}],
+          "fingerprints": {"primary": "SARIF-3"}
+        },
+        {
+          "ruleId": "Use_of_Insufficiently_Random_Values",
+          "level": "note",
+          "locations": [{"physicalLocation": {"artifactLocation": {"uri": "app/tokens.py"}, "region": {"startLine": 9}}}],
+          "fingerprints": {"primary": "SARIF-4"}
+        },
+        {
+          "ruleId": "Information_Exposure_via_Headers",
+          "level": "note",
+          "locations": [{"physicalLocation": {"artifactLocation": {"uri": "app/middleware.py"}, "region": {"startLine": 21}}}],
+          "fingerprints": {"primary": "SARIF-5"}
+        }
+      ]
+    }
+  ]
+}

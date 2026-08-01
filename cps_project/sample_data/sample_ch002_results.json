@@ -1,0 +1,144 @@
+{
+  "_comment": "CH-002 SYNTHESIZED FIXTURE. SCA: Flask 2.0.1 (CVE-2026-27205 confirmed Low in tenant scan), itsdangerous 2.0.1 (placeholder Low CVE), PyYAML 5.4.1 (placeholder Low CVE). Container Security: python:3.11.4-slim base-image package + Dockerfile misconfigurations. Synthesized to match the tenant Vulnerability Type comprehensive report shape. After first real scan, replace placeholder CVE ids with the actual identifiers your tenant emits.",
+  "reportCreationDate": "2026-05-08T16:00:00Z",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "CH002_sca_container_chain",
+    "scanners": ["SAST", "SCA", "Container Security", "IaC Security"]
+  },
+  "scanInformation": {
+    "scanId": "ch002-fixture",
+    "totalScannedLoc": 80,
+    "scannedLoc": 50,
+    "iacScannedLoc": 30
+  },
+  "scanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "resultsList": []
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 3,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 0},
+      {"level": "Low", "value": 3},
+      {"level": "Information", "value": 0}
+    ],
+    "packages": [
+      {
+        "packageName": "Flask",
+        "packageId": "Python-Flask-2.0.1",
+        "packageVersion": "2.0.1",
+        "totalResults": 1,
+        "packageCategory": [
+          {
+            "categoryName": "CWE-524",
+            "categoryResults": [
+              {"resultId": "ch002-flask-1", "cve": "CVE-2026-27205", "severity": "Low",
+               "status": "Recurrent", "state": "To Verify"}
+            ]
+          }
+        ]
+      },
+      {
+        "packageName": "itsdangerous",
+        "packageId": "Python-itsdangerous-2.0.1",
+        "packageVersion": "2.0.1",
+        "totalResults": 1,
+        "packageCategory": [
+          {
+            "categoryName": "CWE-203",
+            "categoryResults": [
+              {"resultId": "ch002-its-1", "cve": "CVE-2026-99001", "severity": "Low",
+               "status": "Recurrent", "state": "To Verify"}
+            ]
+          }
+        ]
+      },
+      {
+        "packageName": "PyYAML",
+        "packageId": "Python-PyYAML-5.4.1",
+        "packageVersion": "5.4.1",
+        "totalResults": 1,
+        "packageCategory": [
+          {
+            "categoryName": "CWE-1333",
+            "categoryResults": [
+              {"resultId": "ch002-yaml-1", "cve": "CVE-2026-99002", "severity": "Low",
+               "status": "Recurrent", "state": "To Verify"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "containerScanResults": {
+    "totalResults": 5,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 0},
+      {"level": "Low", "value": 5},
+      {"level": "Information", "value": 0}
+    ],
+    "technology": [
+      {
+        "name": "Dockerfile",
+        "queries": [
+          {
+            "queryName": "Add Instead of Copy",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_sca_container_chain/Dockerfile",
+               "resultId": "ch002-docker-add-1"}
+            ]
+          },
+          {
+            "queryName": "Missing User Instruction",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_sca_container_chain/Dockerfile",
+               "resultId": "ch002-docker-user-1"}
+            ]
+          },
+          {
+            "queryName": "Healthcheck Instruction Missing",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_sca_container_chain/Dockerfile",
+               "resultId": "ch002-docker-hc-1"}
+            ]
+          },
+          {
+            "queryName": "APT Get Install Lists Were Not Deleted",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_sca_container_chain/Dockerfile",
+               "resultId": "ch002-docker-apt-1"}
+            ]
+          }
+        ]
+      },
+      {
+        "name": "BaseImage",
+        "queries": [
+          {
+            "queryName": "CVE-2026-99003",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_sca_container_chain/Dockerfile",
+               "resultId": "ch002-base-cve-1"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

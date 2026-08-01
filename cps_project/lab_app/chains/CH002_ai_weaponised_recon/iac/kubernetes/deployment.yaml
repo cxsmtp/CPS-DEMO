@@ -1,0 +1,51 @@
+---
+# CH-002 lab — Kubernetes deployment
+# F6 chain participant: NetworkPolicy missing (Low IaC finding).
+# The deployment has no associated NetworkPolicy resource. Egress to
+# arbitrary external endpoints is therefore unrestricted, providing
+# the exfiltration channel the AI agent (F5) uses to deliver compromise
+# data to attacker-controlled infrastructure.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cps-cha2-recon-lab
+  namespace: cps-lab
+  labels:
+    app: cps-cha2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cps-cha2
+  template:
+    metadata:
+      labels:
+        app: cps-cha2
+    spec:
+      containers:
+      - name: recon-lab
+        image: cps-cha2-recon-lab:0.1.0
+        ports:
+        - containerPort: 5080
+        env:
+        - name: CPS_LAB_ENVIRONMENT
+          value: "1"
+        # No securityContext.runAsNonRoot — runs as root.
+        # No securityContext.readOnlyRootFilesystem — writable FS.
+        # These would normally produce IaC findings, but they're not
+        # this chain's participants — F6 is specifically about egress.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cps-cha2-svc
+  namespace: cps-lab
+spec:
+  selector:
+    app: cps-cha2
+  ports:
+  - port: 80
+    targetPort: 5080
+# DELIBERATELY NO NetworkPolicy resource here. The scanner should flag
+# this deployment as lacking egress restriction, surfacing as a Low IaC
+# finding (chain participant F6).

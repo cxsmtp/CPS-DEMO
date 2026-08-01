@@ -1,0 +1,84 @@
+# CH-A1 — AI Component Inventory (declared)
+# ==========================================
+#
+# This file declares the 10 AI components the lab intentionally references
+# in its source code. Checkmarx AI Supply Chain Security should detect
+# each of these and emit them in its CycloneDX AI-BOM export.
+#
+# This file is documentation. The authoritative AI-BOM is what Checkmarx
+# generates after scanning. The chain matcher cross-references this list
+# against the parsed CycloneDX export to confirm coverage.
+
+components:
+
+  # ----- Models (machine-learning-model components) -----
+  - name: "GPT-4o"
+    supplier: "OpenAI"
+    type: machine-learning-model
+    integration_pattern: "openai SDK direct"
+    chain_role_in_CHA1: "TARGET — system prompt for this LLM is what the chain hijacks"
+    source_reference: "src/llm_workflow/agents/openai_gpt4o.py"
+
+  - name: "GPT-4o-mini"
+    supplier: "OpenAI"
+    type: machine-learning-model
+    integration_pattern: "openai SDK direct"
+    chain_role_in_CHA1: "INVENTORY — peripheral; same trust boundary"
+    source_reference: "src/llm_workflow/agents/openai_gpt4o_mini.py"
+
+  - name: "Claude 3.5 Sonnet"
+    supplier: "Anthropic"
+    type: machine-learning-model
+    integration_pattern: "anthropic SDK direct"
+    chain_role_in_CHA1: "INVENTORY"
+    source_reference: "src/llm_workflow/agents/anthropic_sonnet.py"
+
+  - name: "Gemini 1.5 Pro"
+    supplier: "Google"
+    type: machine-learning-model
+    integration_pattern: "google.generativeai SDK direct"
+    chain_role_in_CHA1: "INVENTORY"
+    source_reference: "src/llm_workflow/agents/google_gemini.py"
+
+  - name: "Llama 3.1 70B Instruct"
+    supplier: "Meta"
+    type: machine-learning-model
+    integration_pattern: "AWS Bedrock"
+    chain_role_in_CHA1: "INVENTORY"
+    source_reference: "src/llm_workflow/agents/meta_llama_bedrock.py"
+
+  - name: "Mistral Large"
+    supplier: "Mistral AI"
+    type: machine-learning-model
+    integration_pattern: "mistralai SDK direct"
+    chain_role_in_CHA1: "INVENTORY"
+    source_reference: "src/llm_workflow/agents/mistral_large.py"
+
+  - name: "Command R+"
+    supplier: "Cohere"
+    type: machine-learning-model
+    integration_pattern: "cohere SDK direct"
+    chain_role_in_CHA1: "INVENTORY"
+    source_reference: "src/llm_workflow/agents/cohere_command.py"
+
+  # ----- Libraries / frameworks (library components) -----
+  - name: "LangChain"
+    supplier: "langchain-ai"
+    type: library
+    integration_pattern: "agent orchestration"
+    chain_role_in_CHA1: "INVENTORY — agent inherits chain via prompt loader"
+    source_reference: "src/llm_workflow/agents/langchain_agent.py"
+
+  - name: "Google ADK"
+    supplier: "Google"
+    type: library
+    integration_pattern: "agent framework"
+    chain_role_in_CHA1: "INVENTORY"
+    source_reference: "src/llm_workflow/agents/google_adk_agent.py"
+
+  - name: "Pinecone"
+    supplier: "Pinecone"
+    type: library
+    integration_pattern: "vector DB / RAG retrieval"
+    chain_role_in_CHA1: "INVENTORY"
+    source_reference: "src/llm_workflow/agents/pinecone_rag.py"

@@ -1,0 +1,42 @@
+# CH-001 SCA TARGETED requirements.txt
+# =====================================
+#
+# Each pin below corresponds to a real package version with documented
+# Low-severity CVE advisories. These are intended to produce Checkmarx SCA
+# findings on scan, *not* to be installed in any production environment.
+#
+# Note on Flask version: we pin a known-old Flask to also pull in older
+# transitive dependencies (Werkzeug, Jinja2) that have their own historical
+# Low advisories — this gives Checkmarx SCA a richer dependency graph to
+# flag, demonstrating cross-package SCA findings within a single scan.
+#
+# DO NOT `pip install -r` this file in any environment that touches
+# production systems or real data. It is a scanning artifact.
+
+# Old Flask version with transitive vulnerable Werkzeug/Jinja2.
+# LAB-SCA-VULN-CH001: Flask 2.0.1 pulls vulnerable transitive deps.
+Flask==2.0.1
+
+# Werkzeug pinned to a version with documented Low/Medium advisories
+# around debugger PIN handling and DOS via large requests.
+# LAB-SCA-VULN-CH001: Werkzeug<2.2.3 has CVE advisories.
+Werkzeug==2.0.1
+
+# Jinja2 pinned to a version with documented sandbox-related advisories.
+# LAB-SCA-VULN-CH001: Jinja2<3.1.3 has CVE advisories.
+Jinja2==3.0.1
+
+# Older itsdangerous (used by Flask sessions) — historical low advisories.
+# LAB-SCA-VULN-CH001: itsdangerous earlier than 2.0.1 has advisories.
+itsdangerous==2.0.0
+
+# A package commonly pulled by web apps — pinned old to surface SCA
+# findings across the dependency graph.
+# LAB-SCA-VULN-CH001: PyYAML<5.4 has CVE-2020-14343 (Critical) and others;
+# we pin a slightly newer version to keep severities Low/Medium and stay
+# within the catalog discipline.
+PyYAML==5.4.1
+
+# Click pinned to a slightly old version — typically only Informational
+# findings if any. Useful as a control: shows scanner doesn't false-positive.
+click==8.0.1

@@ -1,0 +1,1 @@
+[Lab prompt template — classifier. CH-A1 chain participant. Loaded via the deliberately-vulnerable prompt_loader at runtime. No integrity sidecar exists.]

@@ -1,0 +1,173 @@
+{
+  "reportCreationDate": "2026-05-03T16:30:00Z",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "CHA1_prompt_template_tampering",
+    "scanners": ["SAST", "SCA", "IaC Security", "AI Supply Chain"]
+  },
+  "scanInformation": {
+    "scanId": "cha1-fixture",
+    "totalScannedLoc": 480,
+    "scannedLoc": 220,
+    "iacScannedLoc": 260
+  },
+  "scanResults": {
+    "totalResults": 4,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 5},
+      {"level": "Low", "value": 0},
+      {"level": "Information", "value": 0}
+    ],
+    "resultsList": [
+      {
+        "queryName": "Path_Traversal",
+        "queryPath": "Python/Python_Medium_Threat/Path_Traversal",
+        "cweId": 22,
+        "vulnerabilitiesTotal": 3,
+        "vulnerabilities": [
+          {"similarityId": 9001, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/prompt_loader.py",
+           "destinationLine": 41,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/prompt_loader.py",
+           "sourceLine": 41},
+          {"similarityId": 9002, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/prompt_loader.py",
+           "destinationLine": 53,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/prompt_loader.py",
+           "sourceLine": 53},
+          {"similarityId": 9003, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/main.py",
+           "destinationLine": 27,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/main.py",
+           "sourceLine": 27}
+        ]
+      },
+      {
+        "queryName": "Use_Of_Hardcoded_Password",
+        "queryPath": "Python/Python_Medium_Threat/Use_Of_Hardcoded_Password",
+        "cweId": 259,
+        "vulnerabilitiesTotal": 5,
+        "vulnerabilities": [
+          {"similarityId": 9101, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "destinationLine": 22,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "sourceLine": 22},
+          {"similarityId": 9102, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "destinationLine": 23,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "sourceLine": 23},
+          {"similarityId": 9103, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "destinationLine": 24,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "sourceLine": 24},
+          {"similarityId": 9104, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "destinationLine": 25,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "sourceLine": 25},
+          {"similarityId": 9105, "severity": "Medium",
+           "destinationFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "destinationLine": 26,
+           "sourceFileName": "/lab_app/chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+           "sourceLine": 26}
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 8,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 1},
+      {"level": "Medium", "value": 4},
+      {"level": "Low", "value": 3},
+      {"level": "Information", "value": 0}
+    ],
+    "technology": [
+      {
+        "name": "Kubernetes",
+        "queries": [
+          {
+            "queryName": "Privilege Escalation Allowed",
+            "resultsList": [
+              {"severity": "High",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/kubernetes/deployment.yaml",
+               "resultId": "cha1-k8s-priv-1"}
+            ]
+          },
+          {
+            "queryName": "Service Account Token Automount Not Disabled",
+            "resultsList": [
+              {"severity": "Medium",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/kubernetes/deployment.yaml",
+               "resultId": "cha1-k8s-sa-1"}
+            ]
+          },
+          {
+            "queryName": "Container CPU Limits Are Not Set",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/kubernetes/deployment.yaml",
+               "resultId": "cha1-k8s-cpu-1"}
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Terraform",
+        "queries": [
+          {
+            "queryName": "IAM policy allows for data exfiltration",
+            "resultsList": [
+              {"severity": "Medium",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/terraform/main.tf",
+               "resultId": "cha1-tf-iam-exfil-1"}
+            ]
+          },
+          {
+            "queryName": "S3 Bucket Without Versioning",
+            "resultsList": [
+              {"severity": "Medium",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/terraform/main.tf",
+               "resultId": "cha1-tf-s3-ver-1"}
+            ]
+          },
+          {
+            "queryName": "S3 Bucket Logging Disabled",
+            "resultsList": [
+              {"severity": "Medium",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/terraform/main.tf",
+               "resultId": "cha1-tf-s3-log-1"}
+            ]
+          },
+          {
+            "queryName": "IAM Access Analyzer Not Enabled",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/terraform/main.tf",
+               "resultId": "cha1-tf-iam-aa-1"}
+            ]
+          },
+          {
+            "queryName": "Resource Not Using Tags",
+            "resultsList": [
+              {"severity": "Information",
+               "fileName": "/lab_app/chains/CHA1_prompt_template_tampering/iac/terraform/main.tf",
+               "resultId": "cha1-tf-tags-1"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "packages": []
+  }
+}

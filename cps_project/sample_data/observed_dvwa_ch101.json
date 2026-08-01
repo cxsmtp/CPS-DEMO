@@ -1,0 +1,92 @@
+{
+  "_comment": "OBSERVED evidence extracted via CxMCP from completed scan c389b5e7-34fc-4be6-821b-59cd647c7f0b of project 'cx-andy-schmit/dvwa' in tenant checkmarx-global-services-internal on 2026-08-01. Every row below is a real finding with its real severity and finding ID. Not synthetic.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "cx-andy-schmit/dvwa",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "c389b5e7-34fc-4be6-821b-59cd647c7f0b",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 5,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "Use of Insufficiently Random Values",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/vulnerabilities/weak_id/index.php",
+            "destinationLine": 17,
+            "similarityId": "0cKWgAwBbW5DRBdAsAtFgWlDSps="
+          }
+        ]
+      },
+      {
+        "queryName": "Broken_or_Risky_Hashing_Function",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/vulnerabilities/brute/source/impossible.php",
+            "destinationLine": 16,
+            "similarityId": "1vhAEfdo6gX4o01jNtoWlL+5pFw="
+          }
+        ]
+      },
+      {
+        "queryName": "Insecure_Value_of_the_SameSite_Cookie_Attribute",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/vulnerabilities/weak_id/source/low.php",
+            "destinationLine": 11,
+            "similarityId": "38KP0fXVsu0eaztrIE7FQMvcz3M="
+          }
+        ]
+      },
+      {
+        "queryName": "Cookie_Overly_Broad_Path",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/vulnerabilities/weak_id/source/low.php",
+            "destinationLine": 11,
+            "similarityId": "fJwgEKiARdqTuc14ELI/eHWQNSE="
+          }
+        ]
+      },
+      {
+        "queryName": "Use_of_Non_Cryptographic_Random",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/vulnerabilities/weak_id/source/impossible.php",
+            "destinationLine": 6,
+            "similarityId": "9nyPzW//SeMEwPhgCqv0U/sDuzg="
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

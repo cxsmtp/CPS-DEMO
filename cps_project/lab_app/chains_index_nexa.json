@@ -1,0 +1,694 @@
+{
+  "version": "1.0",
+  "schema_notes": "Nexa Commerce edition. Same ten chains as chains_index.json, re-scoped to the single Nexa Commerce codebase. Required findings are bound to the owning service directory with match_file_contains so chains cannot cross-match inside one monorepo scan.",
+  "chains": [
+    {
+      "id": "CH-101",
+      "name": "Predictable Session to Account Takeover (PHP)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "PHP",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "storefront/public/lib/session.php",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "Session-prediction chains of the class seen repeatedly in PHP applications that roll their own session identifiers rather than using the platform session handler.",
+      "terminal_outcome": "Full account takeover with no credential theft. A non-cryptographic PRNG generates the session identifier (F1, F5), the verifier over it uses a broken hash (F2), the cookie is delivered without SameSite protection (F3), and its path scope is broader than the issuing endpoint (F4). Enumerate the PRNG, forge the verifier, deliver the cookie cross-site, and the session is valid site-wide. Highest-severity constituent is Medium.",
+      "expected_chain_cps": 10.0,
+      "required_findings": [
+        {
+          "query_name": "Use of Insufficiently Random Values",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "storefront/public/lib/session.php",
+          "severity_verification": "verified_medium",
+          "notes": "PHP preset rates this Medium. The same query is rated Low in the JavaScript preset - severity is preset-dependent.",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Broken_or_Risky_Hashing_Function",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "storefront/public/lib/session.php",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Insecure_Value_of_the_SameSite_Cookie_Attribute",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "storefront/public/lib/session.php",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Cookie_Overly_Broad_Path",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "storefront/public/lib/session.php",
+          "severity_verification": "verified_low",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Use_of_Non_Cryptographic_Random",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "storefront/public/lib/session.php",
+          "severity_verification": "verified_low",
+          "match_file_contains": "storefront"
+        }
+      ]
+    },
+    {
+      "id": "CH-102",
+      "name": "Error-Leak to Credential Disclosure (Java)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Java",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "catalog-service/src/main/java/com/nexa/catalog/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "Incremental-disclosure chains, where several individually minor leaks are combined to reconstruct credentials or PII without ever exploiting a memory-safety or injection flaw.",
+      "terminal_outcome": "Reconstruction of user credentials and PII from disclosure alone. Query strings carry sensitive values into logs and referers (F1), an unauthorised actor can reach sensitive responses (F2), PII flows into sinks that were never meant to hold it (F3), error messages return internal state (F4), and credentials sit unscrubbed in heap-resident objects (F5). No injection, no traversal, no High-rated finding.",
+      "expected_chain_cps": 9.49,
+      "required_findings": [
+        {
+          "query_name": "Information_Exposure_Through_Query_String",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Exposure of Sensitive Information to an Unauthorized Actor",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Privacy_Violation",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Heap_Inspection",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "catalog-service"
+        }
+      ]
+    },
+    {
+      "id": "CH-103",
+      "name": "Config Tamper to Arbitrary File Write (Java)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Java",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "catalog-service/src/main/java/com/nexa/catalog/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "Configuration-tampering chains where an attacker steers application behaviour through settings rather than through a direct injection sink.",
+      "terminal_outcome": "Arbitrary file write leading to code execution. Attacker-controlled input reaches a system or config setting (F1), request parameters are trusted for authorisation-relevant decisions (F2), and a stored relative path is resolved without canonicalisation (F3). A temp file created with permissive permissions (F4) plus a race window on the write (F5) turn the traversal into a reliable write primitive.",
+      "expected_chain_cps": 9.96,
+      "required_findings": [
+        {
+          "query_name": "External_Control_of_System_or_Config_Setting",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Parameter_Tampering",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Stored_Relative_Path_Traversal",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Race_Condition",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "catalog-service"
+        }
+      ]
+    },
+    {
+      "id": "CH-104",
+      "name": "Redirect to Token Theft (JavaScript / Node)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "JavaScript",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "web-gateway/src/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "OAuth and session-token theft via redirect abuse, the pattern behind multiple identity-integration incidents where the redirect finding alone was triaged as low priority.",
+      "terminal_outcome": "Third-party capture of a session or access token. An unvalidated redirect hands control to an attacker-chosen destination (F1), no HSTS means a downgrade to plaintext is not refused (F2), no CSP means no policy blocks the outbound request (F3), reverse tabnabbing gives the opened page a handle back to the opener (F4), and log forging lets the attacker pollute the audit trail that would otherwise reconstruct the sequence (F5).",
+      "expected_chain_cps": 9.14,
+      "required_findings": [
+        {
+          "query_name": "Open_Redirect",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "web-gateway/src/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "web-gateway"
+        },
+        {
+          "query_name": "Missing_HSTS_Header",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "web-gateway/src/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "web-gateway"
+        },
+        {
+          "query_name": "Missing_CSP_Header",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "web-gateway/src/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "web-gateway"
+        },
+        {
+          "query_name": "Unsafe_Use_Of_Target_blank",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "web-gateway/src/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "web-gateway"
+        },
+        {
+          "query_name": "Log_Forging",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "web-gateway/src/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "web-gateway"
+        }
+      ]
+    },
+    {
+      "id": "CH-105",
+      "name": "Container Escape Surface (cross-engine: SAST + IaC)",
+      "engines": [
+        "SAST",
+        "IaC"
+      ],
+      "tech_stack": "Docker / Kubernetes",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "docker-compose.yml + ops/seed/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "Credential-plus-runtime chains of the class documented in container-escape research, where the application finding and the orchestration finding are owned by different teams and neither is escalated alone.",
+      "terminal_outcome": "Escape from the container to the host, then lateral movement. A hardcoded credential in the image (F1) gives an authenticated foothold; unrestricted capabilities (F2) and no seccomp or AppArmor profile (F3) remove the kernel-level barriers to escape; unbound host interface binding (F4) exposes the escape path across the node; and no healthcheck (F5) means the orchestrator never notices the workload misbehaving. The SAST finding and the IaC findings are triaged by different teams, which is precisely why the chain survives.",
+      "expected_chain_cps": 9.25,
+      "required_findings": [
+        {
+          "query_name": "Use_Of_Hardcoded_Password",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "docker-compose.yml + ops/seed/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "ops/seed"
+        },
+        {
+          "query_name": "Container Capabilities Unrestricted",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "docker-compose.yml + ops/seed/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "docker-compose"
+        },
+        {
+          "query_name": "Security Opt Not Set",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "docker-compose.yml + ops/seed/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "docker-compose"
+        },
+        {
+          "query_name": "Container Traffic Not Bound To Host Interface",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "docker-compose.yml + ops/seed/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "docker-compose"
+        },
+        {
+          "query_name": "Healthcheck Instruction Missing",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "docker-compose.yml + ops/seed/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "ops/seed"
+        }
+      ]
+    },
+    {
+      "id": "CH-106",
+      "name": "Informational-Only Chain to Silent Data Exfiltration",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Java",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "catalog-service/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "The class of breach that is discovered months later by a third party rather than by the victim, because every control that would have caught it was rated as a code-quality nit.",
+      "terminal_outcome": "Undetected data exfiltration. Queries are assembled dynamically (F1) so the injection surface exists; database actions are not logged (F2) so exploitation leaves no trail; there is no global error handler (F3) so failures surface raw to the caller; error conditions are returned but never acted on (F4) so the application continues in a bad state; and internal detail is written to the system output stream (F5) where it lands in aggregated logs. THIS CHAIN'S CONSTITUENTS ARE ALL RATED INFORMATIONAL - the tier below Low, which most programs never even render in the backlog. It still reaches the High band.",
+      "expected_chain_cps": 9.15,
+      "required_findings": [
+        {
+          "query_name": "Dynamic_SQL_Queries",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "catalog-service/",
+          "severity_verification": "verified_information",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Insufficient_Logging_of_Database_Actions",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "catalog-service/",
+          "severity_verification": "verified_information",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Pages_Without_Global_Error_Handler",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "catalog-service/",
+          "severity_verification": "verified_information",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Unchecked_Error_Condition",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "catalog-service/",
+          "severity_verification": "verified_information",
+          "match_file_contains": "catalog-service"
+        },
+        {
+          "query_name": "Use_of_System_Output_Stream",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "catalog-service/",
+          "severity_verification": "verified_information",
+          "match_file_contains": "catalog-service"
+        }
+      ]
+    },
+    {
+      "id": "CH-107",
+      "name": "Agent Tool-Path Error Disclosure (AI framework)",
+      "engines": [
+        "SAST",
+        "AI-BOM"
+      ],
+      "tech_stack": "Python / OpenAI Agents SDK",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "assistant-service/src/agents/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "Reconnaissance against an autonomous agent's own runtime. Documented in 2025-2026 agent red-team work: the attacker does not need to jailbreak the model if the framework tells them how its tool layer, MCP transport and session store behave.",
+      "terminal_outcome": "Full reconnaissance of an agent's tool and MCP surface, enabling targeted tool-poisoning and session replay. An object access violation in the tool definition layer (F1) exposes internal object state; error messages then disclose internals of the MCP transport (F2), the tool execution path (F3), the session persistence layer (F4) and the tracing provider (F5). Each disclosure is Low. Together they hand an attacker the agent's tool schema, its MCP wiring, its session storage semantics and its trace identifiers - everything needed to craft a tool-poisoning payload that the model itself will faithfully execute. Note the codebase is a widely used agent framework, not a deliberately vulnerable lab.",
+      "expected_chain_cps": 9.78,
+      "required_findings": [
+        {
+          "query_name": "Object_Access_Violation",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "assistant-service/src/agents/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "assistant-service"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "assistant-service/src/agents/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "/mcp/",
+          "notes": "MCP transport path. Path-scoped: the same query fires 23 times across this codebase; each code path is a distinct chain participant."
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "assistant-service/src/agents/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "tool_actions"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "assistant-service/src/agents/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "session_persistence"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "assistant-service/src/agents/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "tracing"
+        }
+      ],
+      "ai_inventory": [
+        {
+          "component": "OpenAI Agents SDK (Python)",
+          "supplier": "OpenAI",
+          "type": "library",
+          "is_chain_target": true
+        },
+        {
+          "component": "Model Context Protocol client",
+          "supplier": "Anthropic",
+          "type": "library"
+        }
+      ],
+      "ai_bom_note": "AISC component detection is NOT retrievable through the CxMCP listFindings API - no aisc-typed result appears at any severity tier. AI-BOM evidence therefore comes from the CycloneDX export path, as validated separately in CH-A1 where AISC detected 7 of 10 declared components. Reported to Checkmarx as an API gap."
+    },
+    {
+      "id": "CH-108",
+      "name": "Defence-in-Depth Erosion to Credentialed Session Ride",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "PHP",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "storefront/public/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "The pattern behind long-lived compromise of admin interfaces, where no single control failure is dramatic but the combination leaves no barrier standing.",
+      "terminal_outcome": "An attacker rides an authenticated administrator session and reads back database internals. CSRF protection is absent on state-changing endpoints (F1), sensitive database information is reachable by an unauthorised actor (F2), HSTS is never set so the session can be observed after a downgrade (F3), exceptions are handled improperly on the login path (F4), and error messages return query-level detail (F5).",
+      "expected_chain_cps": 9.24,
+      "required_findings": [
+        {
+          "query_name": "CSRF",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "storefront/public/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Exposure of Sensitive Information to an Unauthorized Actor",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "storefront/public/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Missing_HSTS_Header",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "storefront/public/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Improper_Exception_Handling",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "storefront/public/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "storefront"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "storefront/public/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "storefront"
+        }
+      ]
+    },
+    {
+      "id": "CH-109",
+      "name": "Cloud Exfiltration Blindness (Terraform / AWS)",
+      "engines": [
+        "IaC"
+      ],
+      "tech_stack": "Terraform / AWS",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "deploy/terraform/ + deploy/k8s/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "Cloud data-theft incidents where the exfiltration itself was permitted by policy and no telemetry existed to reconstruct it afterwards.",
+      "terminal_outcome": "Data exfiltration from managed data stores with no forensic trail and no clean recovery point. An IAM policy permits the exfiltration operations outright (F1); S3 access logging is disabled (F2) and RDS logging is disabled (F3), so neither the staging nor the extraction is recorded; RDS backups are disabled (F4), removing the recovery point that would bound the damage; and workloads run in an unrecommended namespace (F5), widening the blast radius of any compromised pod. Every finding is Medium. The composite is a breach that cannot be detected, reconstructed, or cleanly recovered from.",
+      "expected_chain_cps": 8.32,
+      "required_findings": [
+        {
+          "query_name": "IAM policy allows for data exfiltration",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "deploy/terraform/ + deploy/k8s/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "terraform"
+        },
+        {
+          "query_name": "S3 Bucket Logging Disabled",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "deploy/terraform/ + deploy/k8s/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "terraform"
+        },
+        {
+          "query_name": "RDS Without Logging",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "deploy/terraform/ + deploy/k8s/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "terraform"
+        },
+        {
+          "query_name": "RDS With Backup Disabled",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "deploy/terraform/ + deploy/k8s/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "terraform"
+        },
+        {
+          "query_name": "Using Unrecommended Namespace",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "deploy/terraform/ + deploy/k8s/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "k8s"
+        }
+      ]
+    },
+    {
+      "id": "CH-110",
+      "name": "API Auth Weakening to Token Forgery",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Go",
+      "validation": {
+        "mode": "expected",
+        "codebase": "nexa-commerce",
+        "location": "auth-service/",
+        "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
+      },
+      "real_world_anchor": "Token-forgery chains against API gateways and auth services, where the signing weakness and the validation gap are separately triaged and separately deferred.",
+      "terminal_outcome": "Forgery of an authentication token accepted by the API. A hardcoded credential in the controller (F1) supplies key material, a weak client-side hash (F2) means the derived value is reproducible, and the JWT is accepted without validating its claims directives (F3) so a forged token with attacker-chosen claims passes verification. Two Mediums and a Low compose into authentication bypass.",
+      "expected_chain_cps": 8.01,
+      "required_findings": [
+        {
+          "query_name": "Use_of_Hardcoded_Password",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "auth-service/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "auth-service"
+        },
+        {
+          "query_name": "Client_Weak_Cryptographic_Hash",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "auth-service/",
+          "severity_verification": "verified_medium",
+          "match_file_contains": "auth-service"
+        },
+        {
+          "query_name": "JWT_No_Claims_Directives_Validation",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "auth-service/",
+          "severity_verification": "verified_low",
+          "match_file_contains": "auth-service"
+        }
+      ]
+    }
+  ]
+}

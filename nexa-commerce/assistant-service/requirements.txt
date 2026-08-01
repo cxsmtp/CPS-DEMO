@@ -1,0 +1,6 @@
+# Nexa Commerce shopping assistant.
+#
+# Deliberately minimal. openai is the only third-party package; everything
+# else is standard library. Pinned to a current release so the SCA surface
+# carries no High or Critical advisory.
+openai==1.99.1

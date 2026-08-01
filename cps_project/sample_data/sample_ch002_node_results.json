@@ -1,0 +1,131 @@
+{
+  "_comment": "CH-002 Node SYNTHESIZED FIXTURE. SCA: mime 1.6.0, semver 5.5.0, ms 2.0.0 each with one Low CVE. Container Security: Dockerfile misconfigurations matching what the previous Python lab scan revealed (Add Instead of Copy, Missing User Instruction, Healthcheck Instruction Missing, APT Get Install Lists Were Not Deleted). After first real Node scan, replace this with the actual export from your tenant.",
+  "reportCreationDate": "2026-05-08T17:00:00Z",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "CH002_node_sca_chain",
+    "scanners": ["SAST", "SCA", "Container Security", "IaC Security"]
+  },
+  "scanInformation": {
+    "scanId": "ch002-node-fixture",
+    "totalScannedLoc": 130,
+    "scannedLoc": 90,
+    "iacScannedLoc": 40
+  },
+  "scanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "resultsList": []
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 3,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 0},
+      {"level": "Low", "value": 3},
+      {"level": "Information", "value": 0}
+    ],
+    "packages": [
+      {
+        "packageName": "mime",
+        "packageId": "Npm-mime-1.6.0",
+        "packageVersion": "1.6.0",
+        "totalResults": 1,
+        "packageCategory": [
+          {
+            "categoryName": "CWE-400",
+            "categoryResults": [
+              {"resultId": "ch002-node-mime-1", "cve": "CVE-2017-16138", "severity": "Low",
+               "status": "Recurrent", "state": "To Verify"}
+            ]
+          }
+        ]
+      },
+      {
+        "packageName": "semver",
+        "packageId": "Npm-semver-5.5.0",
+        "packageVersion": "5.5.0",
+        "totalResults": 1,
+        "packageCategory": [
+          {
+            "categoryName": "CWE-1333",
+            "categoryResults": [
+              {"resultId": "ch002-node-semver-1", "cve": "CVE-2022-25883", "severity": "Low",
+               "status": "Recurrent", "state": "To Verify"}
+            ]
+          }
+        ]
+      },
+      {
+        "packageName": "ms",
+        "packageId": "Npm-ms-2.0.0",
+        "packageVersion": "2.0.0",
+        "totalResults": 1,
+        "packageCategory": [
+          {
+            "categoryName": "CWE-400",
+            "categoryResults": [
+              {"resultId": "ch002-node-ms-1", "cve": "CVE-2015-8315", "severity": "Low",
+               "status": "Recurrent", "state": "To Verify"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "containerScanResults": {
+    "totalResults": 4,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 0},
+      {"level": "Low", "value": 4},
+      {"level": "Information", "value": 0}
+    ],
+    "technology": [
+      {
+        "name": "Dockerfile",
+        "queries": [
+          {
+            "queryName": "Add Instead of Copy",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_node_sca_chain/Dockerfile",
+               "resultId": "ch002-node-docker-add-1"}
+            ]
+          },
+          {
+            "queryName": "Missing User Instruction",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_node_sca_chain/Dockerfile",
+               "resultId": "ch002-node-docker-user-1"}
+            ]
+          },
+          {
+            "queryName": "Healthcheck Instruction Missing",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_node_sca_chain/Dockerfile",
+               "resultId": "ch002-node-docker-hc-1"}
+            ]
+          },
+          {
+            "queryName": "APT Get Install Lists Were Not Deleted",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_node_sca_chain/Dockerfile",
+               "resultId": "ch002-node-docker-apt-1"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "_comment": "CH-002 AI-weaponisation chain SYNTHESIZED FIXTURE. SAST: 3 Low recon findings (info exposure x2, weak random) + 1 peripheral High. SCA: Flask 2.0.1 Low. IaC: NetworkPolicy missing Low. AI-BOM detection happens via separate CycloneDX file. After first real scan, replace with actual export.",
+  "reportCreationDate": "2026-05-08T18:00:00Z",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "CH002_ai_weaponised_recon",
+    "scanners": ["SAST", "SCA", "IaC Security"]
+  },
+  "scanInformation": {
+    "scanId": "ch002-aiweap-fixture",
+    "totalScannedLoc": 200,
+    "scannedLoc": 150,
+    "iacScannedLoc": 50
+  },
+  "scanResults": {
+    "totalResults": 4,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 1},
+      {"level": "Medium", "value": 0},
+      {"level": "Low", "value": 3},
+      {"level": "Information", "value": 0}
+    ],
+    "resultsList": [
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "queryPath": "Python/Python_Low_Visibility/Information_Exposure_Through_an_Error_Message",
+        "cweId": 209,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/lab_app/chains/CH002_ai_weaponised_recon/src/app/main.py",
+            "destinationLine": 38,
+            "similarityId": "ch002aw-sast-1"
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_via_Headers",
+        "queryPath": "Python/Python_Low_Visibility/Information_Exposure_via_Headers",
+        "cweId": 200,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/lab_app/chains/CH002_ai_weaponised_recon/src/app/main.py",
+            "destinationLine": 53,
+            "similarityId": "ch002aw-sast-2"
+          }
+        ]
+      },
+      {
+        "queryName": "Use_of_Insufficiently_Random_Values",
+        "queryPath": "Python/Python_Low_Visibility/Use_of_Insufficiently_Random_Values",
+        "cweId": 330,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/lab_app/chains/CH002_ai_weaponised_recon/src/app/token_helper.py",
+            "destinationLine": 18,
+            "similarityId": "ch002aw-sast-3"
+          }
+        ]
+      },
+      {
+        "queryName": "SQL_Injection",
+        "queryPath": "Python/Python_High_Threat/SQL_Injection",
+        "cweId": 89,
+        "_comment": "Peripheral High - demonstrates chain composes alongside Highs.",
+        "vulnerabilities": [
+          {
+            "severity": "High",
+            "destinationFileName": "/lab_app/chains/CH002_ai_weaponised_recon/src/app/recon_endpoints.py",
+            "destinationLine": 99,
+            "similarityId": "ch002aw-sast-peripheral-1"
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 1,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 0},
+      {"level": "Low", "value": 1},
+      {"level": "Information", "value": 0}
+    ],
+    "technology": [
+      {
+        "name": "Kubernetes",
+        "queries": [
+          {
+            "queryName": "NetworkPolicy missing",
+            "resultsList": [
+              {"severity": "Low",
+               "fileName": "/lab_app/chains/CH002_ai_weaponised_recon/iac/kubernetes/deployment.yaml",
+               "resultId": "ch002aw-iac-1"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scaScanResults": {
+    "totalResults": 1,
+    "severitiesBreakdown": [
+      {"level": "Critical", "value": 0},
+      {"level": "High", "value": 0},
+      {"level": "Medium", "value": 0},
+      {"level": "Low", "value": 1},
+      {"level": "Information", "value": 0}
+    ],
+    "packages": [
+      {
+        "packageName": "Flask",
+        "packageId": "Python-Flask-2.0.1",
+        "packageVersion": "2.0.1",
+        "totalResults": 1,
+        "packageCategory": [
+          {
+            "categoryName": "CWE-524",
+            "categoryResults": [
+              {"resultId": "ch002aw-sca-1", "cve": "CVE-2026-27205", "severity": "Low",
+               "status": "Recurrent", "state": "To Verify"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

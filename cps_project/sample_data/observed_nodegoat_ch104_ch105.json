@@ -1,0 +1,150 @@
+{
+  "_comment": "OBSERVED evidence extracted via CxMCP from completed scan b0fa38ca-d352-483a-9197-41f5e1dc0dec of project 'OWASP/NodeGoat Demo' in tenant checkmarx-global-services-internal on 2026-08-01. Every row below is a real finding with its real severity and finding ID. Not synthetic.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "OWASP/NodeGoat Demo",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "b0fa38ca-d352-483a-9197-41f5e1dc0dec",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 6,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "Open_Redirect",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/NodeGoat-master/app/routes/index.js",
+            "destinationLine": 72,
+            "similarityId": "/dnIdCbf68zHdxSQp2JaS1OJKzc="
+          }
+        ]
+      },
+      {
+        "queryName": "Missing_HSTS_Header",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/NodeGoat-master/app/routes/allocations.js",
+            "destinationLine": 25,
+            "similarityId": "hm7Z3uvUdX4eYqPsqP0g1+nBdAg="
+          }
+        ]
+      },
+      {
+        "queryName": "Missing_CSP_Header",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/NodeGoat-master/app/routes/allocations.js",
+            "destinationLine": 25,
+            "similarityId": "/aEsdK5ud63aXPZ7wiuUUMjW3z0="
+          }
+        ]
+      },
+      {
+        "queryName": "Unsafe_Use_Of_Target_blank",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/NodeGoat-master/app/views/tutorial/a7.html",
+            "destinationLine": 31,
+            "similarityId": "8606084"
+          }
+        ]
+      },
+      {
+        "queryName": "Log_Forging",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/NodeGoat-master/app/routes/session.js",
+            "destinationLine": 57,
+            "similarityId": "jV5Jfp7QHotJ/S1rIqQstuRJCZ8="
+          }
+        ]
+      },
+      {
+        "queryName": "Use_Of_Hardcoded_Password",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/NodeGoat-master/artifacts/db-reset.js",
+            "destinationLine": 27,
+            "similarityId": "6cZYX5Wlml3T9zR0xiuyTLYhFBI="
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 4,
+    "severitiesBreakdown": [],
+    "technology": [
+      {
+        "name": "Dockerfile",
+        "queries": [
+          {
+            "queryName": "Container Capabilities Unrestricted",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/NodeGoat-master/Dockerfile",
+                "resultId": "6KfFKsfD633WAC53IIyANWDnYhg="
+              }
+            ]
+          },
+          {
+            "queryName": "Security Opt Not Set",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/NodeGoat-master/Dockerfile",
+                "resultId": "15674550"
+              }
+            ]
+          },
+          {
+            "queryName": "Container Traffic Not Bound To Host Interface",
+            "resultsList": [
+              {
+                "severity": "Medium",
+                "fileName": "/NodeGoat-master/Dockerfile",
+                "resultId": "15674535"
+              }
+            ]
+          },
+          {
+            "queryName": "Healthcheck Instruction Missing",
+            "resultsList": [
+              {
+                "severity": "Low",
+                "fileName": "/NodeGoat-master/Dockerfile",
+                "resultId": "15674561"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

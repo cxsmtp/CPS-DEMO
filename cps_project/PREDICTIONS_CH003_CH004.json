@@ -1,0 +1,87 @@
+{
+  "generated": "pre-scan prediction, locked before any CH-003/CH-004 scan",
+  "chains": {
+    "CH-003": {
+      "findings": [
+        {
+          "query_name": "HttpOnly_Cookie_Flag_Not_Set",
+          "predicted_severity": "Medium",
+          "predicted_individual_cps": 6.5,
+          "predicted_band": "Moderate",
+          "fires_confidence": "Likely",
+          "severity_verification": "unverified"
+        },
+        {
+          "query_name": "Use_of_Insufficiently_Random_Values",
+          "predicted_severity": "Low",
+          "predicted_individual_cps": 7.75,
+          "predicted_band": "High",
+          "fires_confidence": "Certain",
+          "severity_verification": "unverified"
+        },
+        {
+          "query_name": "Client_Weak_Cryptographic_Hash",
+          "predicted_severity": "Medium",
+          "predicted_individual_cps": 6.75,
+          "predicted_band": "Moderate",
+          "fires_confidence": "Certain",
+          "severity_verification": "verified_medium",
+          "severity_evidence": "MEDIUM in authlab-canary scan 2e83d245 (public/js/clientside.js, 5 sites)"
+        },
+        {
+          "query_name": "Secret_Leak_in_Error_Messages",
+          "predicted_severity": "Low",
+          "predicted_individual_cps": 6.75,
+          "predicted_band": "Moderate",
+          "fires_confidence": "Likely",
+          "severity_verification": "unverified"
+        }
+      ],
+      "predicted_chain_cps": 9.75,
+      "predicted_chain_band": "High",
+      "predicted_state": "FULLY_ASSEMBLED"
+    },
+    "CH-004": {
+      "findings": [
+        {
+          "query_name": "Open_Redirect",
+          "predicted_severity": "Medium",
+          "predicted_individual_cps": 7.12,
+          "predicted_band": "Moderate",
+          "fires_confidence": "Certain",
+          "severity_verification": "verified_medium",
+          "severity_evidence": "MEDIUM in OWASP/NodeGoat scan b0fa38ca (app/routes/index.js:72)"
+        },
+        {
+          "query_name": "Information_Exposure_Through_Headers",
+          "predicted_severity": "Low",
+          "predicted_individual_cps": 6.0,
+          "predicted_band": "Moderate",
+          "fires_confidence": "Likely",
+          "severity_verification": "unverified"
+        },
+        {
+          "query_name": "Missing_HSTS_Header",
+          "predicted_severity": "Medium",
+          "predicted_individual_cps": 4.37,
+          "predicted_band": "Low",
+          "fires_confidence": "Guessing",
+          "severity_verification": "verified_medium",
+          "severity_evidence": "MEDIUM in OWASP/NodeGoat scan b0fa38ca (app/routes/allocations.js:25)"
+        },
+        {
+          "query_name": "Use_Of_HTTP_Sensitive_Data_Exposure",
+          "predicted_severity": "Medium",
+          "predicted_individual_cps": 6.12,
+          "predicted_band": "Moderate",
+          "fires_confidence": "Likely",
+          "severity_verification": "unverified"
+        }
+      ],
+      "predicted_chain_cps": 8.77,
+      "predicted_chain_band": "High",
+      "predicted_state": "FULLY_ASSEMBLED"
+    }
+  },
+  "verification_note": "Severity assumptions checked via Checkmarx MCP against real completed scans in the checkmarx-global-services-internal tenant on 2026-08-01. That is NOT the research tenant (sem/deu), so severity policy may differ; treat verified entries as vendor-default behaviour."
+}

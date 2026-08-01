@@ -1,0 +1,24 @@
+# CH-002 lab — pinned vulnerable Python dependencies
+# ===================================================
+# These pins are deliberate and must not be updated except by the lab
+# maintainer. Each version is chosen because Checkmarx SCA is documented
+# (or expected) to rate its known advisories at Low severity.
+#
+# F1: Flask 2.0.1
+#     - CVE-2026-27205 (CWE-524, response caching of session data)
+#     - Confirmed Low (2.3) in tenant scan of CH-001 / CH-A1
+#
+# F2: itsdangerous 2.0.1
+#     - Documented Low advisories on signing edge cases.
+#     - Severity expectation pending tenant scan; substitute candidate
+#       is urllib3 1.26.x if this rates Medium.
+#
+# F3: PyYAML 5.4.1
+#     - Documented Low advisory on regex DoS class (CVE-2017-18342 was
+#       Critical and is fixed in 5.1+; remaining advisories on 5.4.1
+#       are Low-rated DoS).
+#     - Substitute candidate is certifi older bundle if this rates Medium.
+
+Flask==2.0.1
+itsdangerous==2.0.1
+PyYAML==5.4.1

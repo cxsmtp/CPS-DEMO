@@ -1,0 +1,18 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Build / runtime artefacts
+node_modules/
+target/
+*.war
+*.sqlite
+
+# Scan exports produced when running the verifier
+nexa-results*.json
+
+# Editor / OS cruft
+.DS_Store
+.idea/
+.vscode/

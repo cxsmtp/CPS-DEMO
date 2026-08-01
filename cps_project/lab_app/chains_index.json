@@ -1,0 +1,1382 @@
+{
+  "version": "1.0",
+  "schema_notes": [
+    "This file is the machine-readable chain catalog. The CPS engine's chain",
+    "matcher (Session 2) reads it to determine which chains from the lab",
+    "are assembled in a Checkmarx scan output.",
+    "",
+    "Schema:",
+    "  chains[].id                 stable identifier",
+    "  chains[].name               display name",
+    "  chains[].engines            list of Checkmarx engines required",
+    "  chains[].required_findings  list of findings that MUST be present",
+    "                              for the chain to be considered assembled",
+    "  chains[].peripheral         list of optional additional Low findings",
+    "                              that are produced by the lab but not part",
+    "                              of the chain's primary anatomy",
+    "  chains[].terminal_outcome   business-impacting consequence",
+    "  chains[].real_world_anchor  real breach pattern this matches",
+    "",
+    "Each finding entry:",
+    "  query_name      Checkmarx query family (or KICS rule, or SCA advisory)",
+    "  engine          SAST | IaC | SCA | AI_BOM",
+    "  default_severity_in_catalog  Low | Informational",
+    "  cwe             CWE id (0 if not applicable)",
+    "  role            L1_Signal | L2_Bridge | L3_Amplifier | L4_Impact_Pivot",
+    "  expected_file_glob  glob pattern where the finding is expected",
+    "  notes           free text"
+  ],
+  "chains": [
+    {
+      "id": "CH-001",
+      "name": "Cloud-Metadata Reach via Internal Trust-Boundary Violation",
+      "engines": [
+        "SAST",
+        "IaC"
+      ],
+      "real_world_anchor": "Pattern matches the 2019 Capital One breach.",
+      "terminal_outcome": "Unauthorized retrieval of cached internal data and/or service-account credentials from cloud metadata service.",
+      "required_findings": [
+        {
+          "query_name": "Trust_Boundary_Violation_in_Session_Variables",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 501,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/auth/session_handler.py",
+          "notes": "User input flows into Flask session without sanitization."
+        },
+        {
+          "query_name": "Information_Exposure_via_Headers",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 200,
+          "role": "L1_Signal",
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/utils/header_disclosure.py",
+          "notes": "Reveals internal endpoint topology to attacker."
+        },
+        {
+          "query_name": "URL_Canonicalization_Issue",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 647,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/utils/canonicalization_auth.py",
+          "notes": "Auth checks raw path; Flask routes canonical path."
+        },
+        {
+          "query_name": "Use_of_Insufficiently_Random_Values",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 330,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/utils/insecure_random.py",
+          "notes": "Predictable internal resource identifiers."
+        },
+        {
+          "query_name": "IAM_Policy_With_Resource_Wildcard",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/terraform/main.tf",
+          "notes": "Broad IAM role amplifies blast radius once chain reaches metadata service."
+        },
+        {
+          "query_name": "Instance_Metadata_Service_v1_Allowed",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/terraform/main.tf",
+          "notes": "IMDSv1 reachability is the metadata-reach bridge in this chain."
+        }
+      ],
+      "peripheral": [
+        {
+          "query_name": "Open_Redirect",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 601,
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/routes/supporting.py",
+          "notes": "Not part of CH-001 anatomy; enriches scan output."
+        },
+        {
+          "query_name": "Log_Forging",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 117,
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/routes/supporting.py",
+          "notes": "Peripheral; participates in CH-002 anatomy instead."
+        },
+        {
+          "query_name": "Use_of_Hardcoded_Password",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 259,
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/routes/supporting.py",
+          "notes": "Tenant may rate Medium \u2014 see severity-drift discussion in paper."
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 209,
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/routes/supporting.py",
+          "notes": "Peripheral L1 Signal."
+        },
+        {
+          "query_name": "HttpOnly_Cookie_Flag_Not_Set",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 614,
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/routes/supporting.py",
+          "notes": "Peripheral; participates in session-theft chains."
+        },
+        {
+          "query_name": "S3_Bucket_Without_Versioning",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/terraform/main.tf",
+          "notes": "Peripheral hygiene finding; KICS rule."
+        },
+        {
+          "query_name": "S3_Bucket_Logging_Disabled",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/terraform/main.tf",
+          "notes": "Peripheral hygiene finding; KICS rule."
+        },
+        {
+          "query_name": "Resource_Without_Tags",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Informational",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/terraform/main.tf",
+          "notes": "Peripheral; KICS rule."
+        },
+        {
+          "query_name": "Container_CPU_Limit_Not_Set",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/kubernetes/deployment.yaml",
+          "notes": "Peripheral K8s hygiene; KICS rule."
+        },
+        {
+          "query_name": "Container_Memory_Limit_Not_Set",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/kubernetes/deployment.yaml",
+          "notes": "Peripheral K8s hygiene; KICS rule."
+        },
+        {
+          "query_name": "Service_Account_Token_Automount",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/kubernetes/deployment.yaml",
+          "notes": "Peripheral; relevant to other agentic-exfiltration chains."
+        },
+        {
+          "query_name": "Vulnerable_Dependency_Werkzeug",
+          "engine": "SCA",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/sca/requirements.txt",
+          "notes": "Peripheral SCA finding; pinned old Werkzeug version."
+        },
+        {
+          "query_name": "Vulnerable_Dependency_Jinja2",
+          "engine": "SCA",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/sca/requirements.txt",
+          "notes": "Peripheral SCA finding; pinned old Jinja2 version."
+        },
+        {
+          "query_name": "Vulnerable_Dependency_Flask",
+          "engine": "SCA",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "expected_file_glob": "chains/CH001_metadata_reach/sca/requirements.txt",
+          "notes": "Peripheral SCA finding; pinned old Flask version."
+        }
+      ]
+    },
+    {
+      "id": "CH-001-DEMO",
+      "name": "Cloud-Metadata Reach (validated chain \u2014 actual queries Checkmarx flagged)",
+      "engines": [
+        "SAST",
+        "IaC"
+      ],
+      "real_world_anchor": "Pattern matches the 2019 Capital One breach.",
+      "terminal_outcome": "Cross-engine demonstration that low-rated findings aggregate into Critical-tier chain CPS. This entry uses the actual query names emitted by Checkmarx in our validation scan, not the aspirational names in CH-001 above. Documented in Session 8 of the paper.",
+      "required_findings": [
+        {
+          "query_name": "Trust Boundary Violation in Session Variables",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 501,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH001_metadata_reach/src/app/auth/session_handler.py",
+          "notes": "User input flows into Flask session without sanitization. Confirmed detected x5 in the validation scan."
+        },
+        {
+          "query_name": "Instance Uses Metadata Service IMDSv1",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/terraform/main.tf",
+          "notes": "Cloud-metadata reachability \u2014 the bridge that the chain depends on. Confirmed detected in the validation scan."
+        },
+        {
+          "query_name": "IAM policy allows for data exfiltration",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/terraform/main.tf",
+          "notes": "Tenant rates this Medium. Composes into chain post-metadata-reach. Confirmed detected."
+        },
+        {
+          "query_name": "Privilege Escalation Allowed",
+          "engine": "IaC",
+          "default_severity_in_catalog": "High",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH001_metadata_reach/iac/kubernetes/deployment.yaml",
+          "notes": "Tenant rates this High; CPS scoring agrees. Provides container-escape amplification once chain reaches workload. Confirmed detected."
+        }
+      ],
+      "peripheral": []
+    },
+    {
+      "id": "CH-A1",
+      "name": "Prompt-Template Tampering for Persistent Backdoor",
+      "engines": [
+        "SAST",
+        "IaC",
+        "AI-BOM"
+      ],
+      "real_world_anchor": "Pattern matches prompt-registry compromise / template-tampering attacks documented in 2024-2026 LLM security research.",
+      "terminal_outcome": "Persistent attacker-controlled instructions in an LLM workflow's system prompt, taking effect on every subsequent invocation, without modifying application code or any deployed binary. Demonstrates that AI-Leverage-maximum chains can reach High band CPS from purely Low-rated findings.",
+      "required_findings": [
+        {
+          "query_name": "Path_Traversal",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 22,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CHA1_prompt_template_tampering/src/llm_workflow/prompt_loader.py",
+          "notes": "Attacker-influenceable prompt template path. Tenant may rate Medium; chain matcher accepts either."
+        },
+        {
+          "query_name": "Use_Of_Hardcoded_Password",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 259,
+          "role": "L1_Signal",
+          "expected_file_glob": "chains/CHA1_prompt_template_tampering/src/llm_workflow/credentials.py",
+          "notes": "Hardcoded LLM provider keys. Tenant rates Medium; CH-001-DEMO showed same drift."
+        },
+        {
+          "query_name": "AI Component machine-learning-model OpenAI GPT-4o",
+          "engine": "AI-BOM",
+          "default_severity_in_catalog": "Informational",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CHA1_prompt_template_tampering/src/llm_workflow/agents/openai_gpt4o.py",
+          "notes": "Chain target \u2014 the LLM whose system prompt is hijacked."
+        }
+      ],
+      "peripheral": [
+        {
+          "query_name": "Privilege Escalation Allowed",
+          "engine": "IaC",
+          "default_severity_in_catalog": "High",
+          "cwe": 0,
+          "expected_file_glob": "chains/CHA1_prompt_template_tampering/iac/kubernetes/deployment.yaml",
+          "notes": "Same K8s deployment as CH-001 \u2014 attacker-write capability."
+        },
+        {
+          "query_name": "IAM policy allows for data exfiltration",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "expected_file_glob": "chains/CHA1_prompt_template_tampering/iac/terraform/main.tf",
+          "notes": "S3 bucket overwrite path."
+        }
+      ],
+      "ai_inventory": [
+        {
+          "component": "GPT-4o",
+          "supplier": "OpenAI",
+          "type": "machine-learning-model",
+          "is_chain_target": true
+        },
+        {
+          "component": "GPT-4o-mini",
+          "supplier": "OpenAI",
+          "type": "machine-learning-model"
+        },
+        {
+          "component": "Claude 3.5 Sonnet",
+          "supplier": "Anthropic",
+          "type": "machine-learning-model"
+        },
+        {
+          "component": "Gemini 1.5 Pro",
+          "supplier": "Google",
+          "type": "machine-learning-model"
+        },
+        {
+          "component": "Llama 3.1 70B Instruct",
+          "supplier": "Meta",
+          "type": "machine-learning-model"
+        },
+        {
+          "component": "Mistral Large",
+          "supplier": "Mistral AI",
+          "type": "machine-learning-model"
+        },
+        {
+          "component": "Command R+",
+          "supplier": "Cohere",
+          "type": "machine-learning-model"
+        },
+        {
+          "component": "LangChain",
+          "supplier": "langchain-ai",
+          "type": "library"
+        },
+        {
+          "component": "Google ADK",
+          "supplier": "Google",
+          "type": "library"
+        },
+        {
+          "component": "Pinecone",
+          "supplier": "Pinecone",
+          "type": "library"
+        }
+      ]
+    },
+    {
+      "id": "CH-002",
+      "name": "AI-Weaponised Recon-to-Exploit Chain",
+      "engines": [
+        "SAST",
+        "SCA",
+        "AI-BOM",
+        "IaC"
+      ],
+      "real_world_anchor": "Pattern matches 2024-2026 LLM red-team research on tool-using agents. The reconnaissance primitives (info exposure, weak random) have always existed; what changes in the AI era is that agents with tool access can autonomously synthesize exploits from disclosed reconnaissance, dropping the cost of going from disclosure to compromise from days to seconds.",
+      "terminal_outcome": "Autonomous exploit synthesis from disclosed reconnaissance: F1+F2 disclose framework and library versions, F3 disclosed predictable session token format, F4 confirms a known CVE on the disclosed dependency. F5 (the tool-using AI agent embedded in the application) cross-references the disclosure against advisory databases, generates an exploit using the predictable tokens and known CVE, executes via Code Interpreter, and exfiltrates via the unrestricted egress (F6). Without F5, the chain is unactionable Low-tier reconnaissance; with F5, it is targeted compromise. The framework's AI-delta is the empirical measurement of this difference.",
+      "ai_leverage_findings": [
+        "AI Component machine-learning-model OpenAI GPT-4o"
+      ],
+      "ai_delta_claim": "Chain CPS without F5 sits in Moderate band (~6.65); with F5 reaches High band (~9.90). Delta: ~3.25 points, band shift Moderate to High.",
+      "required_findings": [
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 209,
+          "role": "L1_Signal",
+          "expected_file_glob": "chains/CH002_ai_weaponised_recon/src/app/main.py",
+          "notes": "Error handler returns stack trace, framework version, Python version, module path."
+        },
+        {
+          "query_name": "Information_Exposure_via_Headers",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 200,
+          "role": "L1_Signal",
+          "expected_file_glob": "chains/CH002_ai_weaponised_recon/src/app/main.py",
+          "notes": "after_request decorator adds Server, X-Powered-By, X-App-Version disclosure headers."
+        },
+        {
+          "query_name": "Use_of_Insufficiently_Random_Values",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 330,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH002_ai_weaponised_recon/src/app/token_helper.py",
+          "notes": "Session token generation uses random.seed(time.time()) \u2014 predictable PRNG."
+        },
+        {
+          "query_name": "CVE-2026-27205",
+          "engine": "SCA",
+          "default_severity_in_catalog": "Low",
+          "cwe": 524,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH002_ai_weaponised_recon/requirements.txt",
+          "notes": "Flask 2.0.1 confirmed Low (2.3) in tenant scan. The 'disclosed dep with known CVE' chain primitive."
+        },
+        {
+          "query_name": "AI Component machine-learning-model OpenAI GPT-4o",
+          "engine": "AI-BOM",
+          "default_severity_in_catalog": "Informational",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH002_ai_weaponised_recon/src/app/ai_agent.py",
+          "notes": "F5 \u2014 the AI weaponisation contributor. AISC should detect GPT-4o as an OpenAI machine-learning-model from the import + model name reference. Without this finding the chain CPS drops to Moderate band."
+        },
+        {
+          "query_name": "NetworkPolicy missing",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH002_ai_weaponised_recon/iac/kubernetes/deployment.yaml",
+          "notes": "K8s deployment has no associated NetworkPolicy \u2014 egress unrestricted. Tenant query name may differ (e.g., 'Pod Has No Associated NetworkPolicy' or 'Egress Not Restricted'); substitute post-scan."
+        }
+      ],
+      "ai_inventory": [
+        {
+          "component": "GPT-4o",
+          "supplier": "OpenAI",
+          "type": "machine-learning-model",
+          "is_chain_target": true,
+          "capability": "code-interpreter"
+        }
+      ]
+    },
+    {
+      "id": "CH-002-NODE",
+      "name": "SCA + Container Security (Node \u2014 archived, did not reach High band)",
+      "engines": [
+        "SCA",
+        "Container Security"
+      ],
+      "real_world_anchor": "Cleansed Node lab attempt at all-Low SCA + Container chain. Archived after empirical math demonstrated chain CPS reaches only Moderate band (~6.14) on the available Low-rated chain participants. The hygiene-tier scoring of Healthcheck Missing and APT findings is correct for those findings' chain potential, but means a chain dominated by them does not reach High band. This archival entry documents the attempt for honest methodology reporting.",
+      "terminal_outcome": "Cross-tenant information leakage in shared hosting contexts. Lab built but not validated; superseded by CH-002 AI-weaponisation chain.",
+      "required_findings": [
+        {
+          "query_name": "CVE-2024-47764",
+          "engine": "SCA",
+          "default_severity_in_catalog": "Low",
+          "cwe": 74,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH002_node_sca_chain/package.json",
+          "notes": "cookie 0.6.0 \u2014 Medium-Low in tenant. Lab files preserved at chains/CH002_node_sca_chain/."
+        }
+      ]
+    },
+    {
+      "id": "CH-002-PYTHON",
+      "name": "SCA + Container Security (Python \u2014 archived, partially assembled)",
+      "engines": [
+        "SCA",
+        "Container Security"
+      ],
+      "real_world_anchor": "Original Python iteration of CH-002, archived for honest reporting. The Python tenant scan returned zero advisories on itsdangerous 2.0.1 and PyYAML 5.4.1 \u2014 the chain assembled only partially. Documented as a methodology finding: 2026-era SCA databases retroactively re-rate older Low advisories upward, making strict-Low Python chains of more than ~3 SCA findings difficult to construct without library substitution.",
+      "terminal_outcome": "Same as CH-002 (cross-tenant information leakage). Preserved here as the Python iteration of the chain that motivated the npm pivot.",
+      "required_findings": [
+        {
+          "query_name": "CVE-2026-27205",
+          "engine": "SCA",
+          "default_severity_in_catalog": "Low",
+          "cwe": 524,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH002_sca_container_chain/requirements.txt",
+          "notes": "Flask 2.0.1 response cache leak. Confirmed Low (2.3) in tenant scan."
+        },
+        {
+          "query_name": "Add Instead of Copy",
+          "engine": "Container Security",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH002_sca_container_chain/Dockerfile",
+          "notes": "KICS Dockerfile rule. Confirmed firing in tenant scan of Python lab."
+        },
+        {
+          "query_name": "Missing User Instruction",
+          "engine": "Container Security",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH002_sca_container_chain/Dockerfile",
+          "notes": "KICS Dockerfile rule. Confirmed firing in tenant scan."
+        },
+        {
+          "query_name": "Healthcheck Instruction Missing",
+          "engine": "Container Security",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "chains/CH002_sca_container_chain/Dockerfile",
+          "notes": "KICS Dockerfile rule. Confirmed firing in tenant scan."
+        }
+      ]
+    },
+    {
+      "id": "CH-003",
+      "name": "Session Forgery to Account Takeover",
+      "engines": [
+        "SAST"
+      ],
+      "real_world_anchor": "Pattern matches session-prediction and cookie-theft chains documented across web application post-mortems. Each link is a finding class that appears routinely in enterprise backlogs and is deprioritized on its individual severity.",
+      "terminal_outcome": "Full account takeover without credential theft. The session cookie is script-readable (F1), the session identifier is generated from a non-cryptographic PRNG seeded near a timestamp the attacker can observe (F2), the signature over that identifier uses SHA-1 (F3), and the verification failure path returns the signing key to the caller (F4). With the key disclosed and the identifier space enumerable, the attacker mints valid signed sessions for arbitrary users. No individual finding is rated High by the scanner.",
+      "required_findings": [
+        {
+          "query_name": "HttpOnly_Cookie_Flag_Not_Set",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 1004,
+          "role": "L1_Signal",
+          "expected_file_glob": "chains/CH003_session_forgery/src/server.js",
+          "notes": "Set-Cookie written without HttpOnly. Severity confirmed Medium in validation tenant's JavaScript preset.",
+          "severity_verification": "unverified"
+        },
+        {
+          "query_name": "Use_of_Insufficiently_Random_Values",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 330,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH003_session_forgery/src/session.js",
+          "notes": "Math.random() used for session identifier. Severity confirmed Low in validation tenant.",
+          "severity_verification": "unverified"
+        },
+        {
+          "query_name": "Client_Weak_Cryptographic_Hash",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 327,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH003_session_forgery/src/session.js",
+          "notes": "crypto.createHash('sha1') used to sign session identifiers. Severity confirmed Medium in validation tenant.",
+          "severity_verification": "verified_medium",
+          "severity_evidence": "MEDIUM in authlab-canary scan 2e83d245 (public/js/clientside.js, 5 sites)"
+        },
+        {
+          "query_name": "Secret_Leak_in_Error_Messages",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 209,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH003_session_forgery/src/session.js",
+          "notes": "Signing key embedded in thrown Error message and returned by the server error handler. Severity confirmed Low in validation tenant.",
+          "severity_verification": "unverified"
+        }
+      ]
+    },
+    {
+      "id": "CH-004",
+      "name": "Redirect-to-Token-Exfiltration",
+      "engines": [
+        "SAST"
+      ],
+      "real_world_anchor": "Pattern matches OAuth redirect-parameter abuse chains reported against multiple identity integrations, where the individually low-rated redirect handling becomes token theft once the transport and disclosure weaknesses are present alongside it.",
+      "terminal_outcome": "Third-party exfiltration of an OAuth access token. Response headers disclose stack and version (F2), no Strict-Transport-Security header is ever set so a downgrade to plaintext is not refused (F3), the authorization code is exchanged over plaintext http and the token returns on the same channel (F4), and the callback then redirects to an attacker-supplied return_to value with the token appended to the query string (F1). No individual finding is rated High by the scanner.",
+      "required_findings": [
+        {
+          "query_name": "Open_Redirect",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 601,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH004_redirect_token_exfil/src/server.js",
+          "notes": "return_to query parameter written into Location header with no allow-list. Severity confirmed Medium in validation tenant.",
+          "severity_verification": "verified_medium",
+          "severity_evidence": "MEDIUM in OWASP/NodeGoat scan b0fa38ca (app/routes/index.js:72)"
+        },
+        {
+          "query_name": "Information_Exposure_Through_Headers",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 200,
+          "role": "L1_Signal",
+          "expected_file_glob": "chains/CH004_redirect_token_exfil/src/oauth_callback.js",
+          "notes": "Server, X-Powered-By, X-App-Version and X-Backend-Build headers disclose stack and version. Severity confirmed Low in validation tenant.",
+          "severity_verification": "unverified"
+        },
+        {
+          "query_name": "Missing_HSTS_Header",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 319,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "chains/CH004_redirect_token_exfil/src/oauth_callback.js",
+          "notes": "Strict-Transport-Security never written. Severity confirmed Medium in validation tenant.",
+          "severity_verification": "verified_medium",
+          "severity_evidence": "MEDIUM in OWASP/NodeGoat scan b0fa38ca (app/routes/allocations.js:25)"
+        },
+        {
+          "query_name": "Use_Of_HTTP_Sensitive_Data_Exposure",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 319,
+          "role": "L2_Bridge",
+          "expected_file_glob": "chains/CH004_redirect_token_exfil/src/oauth_callback.js",
+          "notes": "Authorization code and access token carried over plaintext http. Severity confirmed Medium in validation tenant.",
+          "severity_verification": "unverified"
+        }
+      ]
+    },
+    {
+      "id": "CH-101",
+      "name": "Predictable Session to Account Takeover (PHP)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "PHP",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "cx-andy-schmit/dvwa",
+        "scan_id": "c389b5e7-34fc-4be6-821b-59cd647c7f0b",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding below was observed in this completed scan with the severity recorded. Finding IDs are re-checkable via CxMCP getFindingDetails. No finding in this chain is rated High or Critical."
+      },
+      "real_world_anchor": "Session-prediction chains of the class seen repeatedly in PHP applications that roll their own session identifiers rather than using the platform session handler.",
+      "terminal_outcome": "Full account takeover with no credential theft. A non-cryptographic PRNG generates the session identifier (F1, F5), the verifier over it uses a broken hash (F2), the cookie is delivered without SameSite protection (F3), and its path scope is broader than the issuing endpoint (F4). Enumerate the PRNG, forge the verifier, deliver the cookie cross-site, and the session is valid site-wide. Highest-severity constituent is Medium.",
+      "expected_chain_cps": 10.0,
+      "required_findings": [
+        {
+          "query_name": "Use of Insufficiently Random Values",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/vulnerabilities/weak_id/index.php",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "0cKWgAwBbW5DRBdAsAtFgWlDSps=",
+          "evidence_location": "/vulnerabilities/weak_id/index.php:17",
+          "notes": "PHP preset rates this Medium. The same query is rated Low in the JavaScript preset - severity is preset-dependent."
+        },
+        {
+          "query_name": "Broken_or_Risky_Hashing_Function",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/vulnerabilities/brute/source/impossible.php",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "1vhAEfdo6gX4o01jNtoWlL+5pFw=",
+          "evidence_location": "/vulnerabilities/brute/source/impossible.php:16"
+        },
+        {
+          "query_name": "Insecure_Value_of_the_SameSite_Cookie_Attribute",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/vulnerabilities/weak_id/source/low.php",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "38KP0fXVsu0eaztrIE7FQMvcz3M=",
+          "evidence_location": "/vulnerabilities/weak_id/source/low.php:11"
+        },
+        {
+          "query_name": "Cookie_Overly_Broad_Path",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/vulnerabilities/weak_id/source/low.php",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "fJwgEKiARdqTuc14ELI/eHWQNSE=",
+          "evidence_location": "/vulnerabilities/weak_id/source/low.php:11"
+        },
+        {
+          "query_name": "Use_of_Non_Cryptographic_Random",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/vulnerabilities/weak_id/source/impossible.php",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "9nyPzW//SeMEwPhgCqv0U/sDuzg=",
+          "evidence_location": "/vulnerabilities/weak_id/source/impossible.php:6"
+        }
+      ]
+    },
+    {
+      "id": "CH-102",
+      "name": "Error-Leak to Credential Disclosure (Java)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Java",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "cx-carolyn-yates/JavaVulnerableLab",
+        "scan_id": "382c4fa6-5687-4b5a-8205-6ca91269c0fa",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding below was observed in this completed scan with the severity recorded. Finding IDs are re-checkable via CxMCP getFindingDetails. No finding in this chain is rated High or Critical."
+      },
+      "real_world_anchor": "Incremental-disclosure chains, where several individually minor leaks are combined to reconstruct credentials or PII without ever exploiting a memory-safety or injection flaw.",
+      "terminal_outcome": "Reconstruction of user credentials and PII from disclosure alone. Query strings carry sensitive values into logs and referers (F1), an unauthorised actor can reach sensitive responses (F2), PII flows into sinks that were never meant to hold it (F3), error messages return internal state (F4), and credentials sit unscrubbed in heap-resident objects (F5). No injection, no traversal, no High-rated finding.",
+      "expected_chain_cps": 9.49,
+      "required_findings": [
+        {
+          "query_name": "Information_Exposure_Through_Query_String",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "tgntZzrWo1jl7GbAn6d9U92okIU=",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java:57"
+        },
+        {
+          "query_name": "Exposure of Sensitive Information to an Unauthorized Actor",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/main/webapp/ForgotPassword.jsp",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "odE2Z3LeAPVEmVcBoqlnC+wBjkc=",
+          "evidence_location": "/src/main/webapp/ForgotPassword.jsp:10"
+        },
+        {
+          "query_name": "Privacy_Violation",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/XPathQuery.java",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "qJaqS2qGP2h7Yg1/u45ItVUL1F0=",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/XPathQuery.java:50"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/EmailCheck.java",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "467161",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/EmailCheck.java:60"
+        },
+        {
+          "query_name": "Heap_Inspection",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/LoginValidator.java",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "67831",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/LoginValidator.java:44"
+        }
+      ]
+    },
+    {
+      "id": "CH-103",
+      "name": "Config Tamper to Arbitrary File Write (Java)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Java",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "cx-carolyn-yates/JavaVulnerableLab",
+        "scan_id": "382c4fa6-5687-4b5a-8205-6ca91269c0fa",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding below was observed in this completed scan with the severity recorded. Finding IDs are re-checkable via CxMCP getFindingDetails. No finding in this chain is rated High or Critical."
+      },
+      "real_world_anchor": "Configuration-tampering chains where an attacker steers application behaviour through settings rather than through a direct injection sink.",
+      "terminal_outcome": "Arbitrary file write leading to code execution. Attacker-controlled input reaches a system or config setting (F1), request parameters are trusted for authorisation-relevant decisions (F2), and a stored relative path is resolved without canonicalisation (F3). A temp file created with permissive permissions (F4) plus a race window on the write (F5) turn the traversal into a reliable write primitive.",
+      "expected_chain_cps": 9.96,
+      "required_findings": [
+        {
+          "query_name": "External_Control_of_System_or_Config_Setting",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "117621",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java:57"
+        },
+        {
+          "query_name": "Parameter_Tampering",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/EmailCheck.java",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "oLhf1Sa69rpDxNtxDtYOlWclNgs=",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/EmailCheck.java:42"
+        },
+        {
+          "query_name": "Stored_Relative_Path_Traversal",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/main/webapp/vulnerability/sqli/download_id_union.jsp",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "pCeSA+Se0EWYdLfztdcz5VMoa4s=",
+          "evidence_location": "/src/main/webapp/vulnerability/sqli/download_id_union.jsp:24"
+        },
+        {
+          "query_name": "Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/AddPage.java",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "ppKpfm8TZs9xeAZbkQZ8YK2YDt4=",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/AddPage.java:45"
+        },
+        {
+          "query_name": "Race_Condition",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "MLft8mwUe92v5D6e6BOWNT+gC90=",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java:59"
+        }
+      ]
+    },
+    {
+      "id": "CH-104",
+      "name": "Redirect to Token Theft (JavaScript / Node)",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "JavaScript",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "OWASP/NodeGoat Demo",
+        "scan_id": "b0fa38ca-d352-483a-9197-41f5e1dc0dec",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding below was observed in this completed scan with the severity recorded. Finding IDs are re-checkable via CxMCP getFindingDetails. No finding in this chain is rated High or Critical."
+      },
+      "real_world_anchor": "OAuth and session-token theft via redirect abuse, the pattern behind multiple identity-integration incidents where the redirect finding alone was triaged as low priority.",
+      "terminal_outcome": "Third-party capture of a session or access token. An unvalidated redirect hands control to an attacker-chosen destination (F1), no HSTS means a downgrade to plaintext is not refused (F2), no CSP means no policy blocks the outbound request (F3), reverse tabnabbing gives the opened page a handle back to the opener (F4), and log forging lets the attacker pollute the audit trail that would otherwise reconstruct the sequence (F5).",
+      "expected_chain_cps": 9.14,
+      "required_findings": [
+        {
+          "query_name": "Open_Redirect",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/NodeGoat-master/app/routes/index.js",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "/dnIdCbf68zHdxSQp2JaS1OJKzc=",
+          "evidence_location": "/NodeGoat-master/app/routes/index.js:72"
+        },
+        {
+          "query_name": "Missing_HSTS_Header",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/NodeGoat-master/app/routes/allocations.js",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "hm7Z3uvUdX4eYqPsqP0g1+nBdAg=",
+          "evidence_location": "/NodeGoat-master/app/routes/allocations.js:25"
+        },
+        {
+          "query_name": "Missing_CSP_Header",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/NodeGoat-master/app/routes/allocations.js",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "/aEsdK5ud63aXPZ7wiuUUMjW3z0=",
+          "evidence_location": "/NodeGoat-master/app/routes/allocations.js:25"
+        },
+        {
+          "query_name": "Unsafe_Use_Of_Target_blank",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/NodeGoat-master/app/views/tutorial/a7.html",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "8606084",
+          "evidence_location": "/NodeGoat-master/app/views/tutorial/a7.html:31"
+        },
+        {
+          "query_name": "Log_Forging",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/NodeGoat-master/app/routes/session.js",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "jV5Jfp7QHotJ/S1rIqQstuRJCZ8=",
+          "evidence_location": "/NodeGoat-master/app/routes/session.js:57"
+        }
+      ]
+    },
+    {
+      "id": "CH-105",
+      "name": "Container Escape Surface (cross-engine: SAST + IaC)",
+      "engines": [
+        "SAST",
+        "IaC"
+      ],
+      "tech_stack": "Docker / Kubernetes",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "OWASP/NodeGoat Demo",
+        "scan_id": "b0fa38ca-d352-483a-9197-41f5e1dc0dec",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding below was observed in this completed scan with the severity recorded. Finding IDs are re-checkable via CxMCP getFindingDetails. No finding in this chain is rated High or Critical."
+      },
+      "real_world_anchor": "Credential-plus-runtime chains of the class documented in container-escape research, where the application finding and the orchestration finding are owned by different teams and neither is escalated alone.",
+      "terminal_outcome": "Escape from the container to the host, then lateral movement. A hardcoded credential in the image (F1) gives an authenticated foothold; unrestricted capabilities (F2) and no seccomp or AppArmor profile (F3) remove the kernel-level barriers to escape; unbound host interface binding (F4) exposes the escape path across the node; and no healthcheck (F5) means the orchestrator never notices the workload misbehaving. The SAST finding and the IaC findings are triaged by different teams, which is precisely why the chain survives.",
+      "expected_chain_cps": 9.25,
+      "required_findings": [
+        {
+          "query_name": "Use_Of_Hardcoded_Password",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/NodeGoat-master/artifacts/db-reset.js",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "6cZYX5Wlml3T9zR0xiuyTLYhFBI=",
+          "evidence_location": "/NodeGoat-master/artifacts/db-reset.js:27"
+        },
+        {
+          "query_name": "Container Capabilities Unrestricted",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "*",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "6KfFKsfD633WAC53IIyANWDnYhg="
+        },
+        {
+          "query_name": "Security Opt Not Set",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "*",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "15674550"
+        },
+        {
+          "query_name": "Container Traffic Not Bound To Host Interface",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "*",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "15674535"
+        },
+        {
+          "query_name": "Healthcheck Instruction Missing",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "*",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "15674561"
+        }
+      ]
+    },
+    {
+      "id": "CH-106",
+      "name": "Informational-Only Chain to Silent Data Exfiltration",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Java",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "cx-carolyn-yates/JavaVulnerableLab",
+        "scan_id": "382c4fa6-5687-4b5a-8205-6ca91269c0fa",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding was read out of this completed scan with the severity Checkmarx assigned. Finding IDs are re-checkable via CxMCP getFindingDetails."
+      },
+      "real_world_anchor": "The class of breach that is discovered months later by a third party rather than by the victim, because every control that would have caught it was rated as a code-quality nit.",
+      "terminal_outcome": "Undetected data exfiltration. Queries are assembled dynamically (F1) so the injection surface exists; database actions are not logged (F2) so exploitation leaves no trail; there is no global error handler (F3) so failures surface raw to the caller; error conditions are returned but never acted on (F4) so the application continues in a bad state; and internal detail is written to the system output stream (F5) where it lands in aggregated logs. THIS CHAIN'S CONSTITUENTS ARE ALL RATED INFORMATIONAL - the tier below Low, which most programs never even render in the backlog. It still reaches the High band.",
+      "expected_chain_cps": 9.15,
+      "required_findings": [
+        {
+          "query_name": "Dynamic_SQL_Queries",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/LoginValidator.java",
+          "severity_verification": "verified_information",
+          "evidence_finding_id": "0XBp02QSHGEql4giNp73keCA3Es=",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/LoginValidator.java:52"
+        },
+        {
+          "query_name": "Insufficient_Logging_of_Database_Actions",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/src/main/webapp/vulnerability/idor/change-email.jsp",
+          "severity_verification": "verified_information",
+          "evidence_finding_id": "12jj98OpDWTFsrU0lpG1XUagp/Y=",
+          "evidence_location": "/src/main/webapp/vulnerability/idor/change-email.jsp:32"
+        },
+        {
+          "query_name": "Pages_Without_Global_Error_Handler",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/main/webapp/admin/admin.jsp",
+          "severity_verification": "verified_information",
+          "evidence_finding_id": "0tZuTNbFjEN8ykwCCIAbRU3KNJA=",
+          "evidence_location": "/src/main/webapp/admin/admin.jsp:1"
+        },
+        {
+          "query_name": "Unchecked_Error_Condition",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/src/main/java/org/cysecurity/cspf/jvl/controller/Logout.java",
+          "severity_verification": "verified_information",
+          "evidence_finding_id": "3iWHH6gMkWJLKli9QiunyCCQIG0=",
+          "evidence_location": "/src/main/java/org/cysecurity/cspf/jvl/controller/Logout.java:42"
+        },
+        {
+          "query_name": "Use_of_System_Output_Stream",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Information",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/src/main/webapp/vulnerability/DisplayMessage.jsp",
+          "severity_verification": "verified_information",
+          "evidence_finding_id": "0APbv9DRr/LUAZserU2/2fSPWus=",
+          "evidence_location": "/src/main/webapp/vulnerability/DisplayMessage.jsp:35"
+        }
+      ]
+    },
+    {
+      "id": "CH-107",
+      "name": "Agent Tool-Path Error Disclosure (AI framework)",
+      "engines": [
+        "SAST",
+        "AI-BOM"
+      ],
+      "tech_stack": "Python / OpenAI Agents SDK",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "AISC_openai_agents_python",
+        "scan_id": "5797794c-4ea0-4553-a883-c908a6fec287",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding was read out of this completed scan with the severity Checkmarx assigned. Finding IDs are re-checkable via CxMCP getFindingDetails."
+      },
+      "real_world_anchor": "Reconnaissance against an autonomous agent's own runtime. Documented in 2025-2026 agent red-team work: the attacker does not need to jailbreak the model if the framework tells them how its tool layer, MCP transport and session store behave.",
+      "terminal_outcome": "Full reconnaissance of an agent's tool and MCP surface, enabling targeted tool-poisoning and session replay. An object access violation in the tool definition layer (F1) exposes internal object state; error messages then disclose internals of the MCP transport (F2), the tool execution path (F3), the session persistence layer (F4) and the tracing provider (F5). Each disclosure is Low. Together they hand an attacker the agent's tool schema, its MCP wiring, its session storage semantics and its trace identifiers - everything needed to craft a tool-poisoning payload that the model itself will faithfully execute. Note the codebase is a widely used agent framework, not a deliberately vulnerable lab.",
+      "expected_chain_cps": 9.78,
+      "required_findings": [
+        {
+          "query_name": "Object_Access_Violation",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/agents/tool.py",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "p9H+6K7MHD/gKWBQ699t5SEO4Pw=",
+          "evidence_location": "/src/agents/tool.py:1284"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/src/agents/mcp/util.py",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "gPZSEBzeEMW5I9wlkSoHqZvh4eQ=",
+          "evidence_location": "/src/agents/mcp/util.py:296",
+          "match_file_contains": "/mcp/",
+          "notes": "MCP transport path. Path-scoped: the same query fires 23 times across this codebase; each code path is a distinct chain participant."
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/agents/run_internal/tool_actions.py",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "FRtCxgpOBDPuQtV+qNVxGbJ97BQ=",
+          "evidence_location": "/src/agents/run_internal/tool_actions.py:130",
+          "match_file_contains": "tool_actions"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/src/agents/run_internal/session_persistence.py",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "NwUJPu9T7HKfoPXIvLPqn011OpM=",
+          "evidence_location": "/src/agents/run_internal/session_persistence.py:479",
+          "match_file_contains": "session_persistence"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/src/agents/tracing/provider.py",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "32+Yo0mzZGU30FIJH3+Qi0oLngA=",
+          "evidence_location": "/src/agents/tracing/provider.py:95",
+          "match_file_contains": "tracing"
+        }
+      ],
+      "ai_inventory": [
+        {
+          "component": "OpenAI Agents SDK (Python)",
+          "supplier": "OpenAI",
+          "type": "library",
+          "is_chain_target": true
+        },
+        {
+          "component": "Model Context Protocol client",
+          "supplier": "Anthropic",
+          "type": "library"
+        }
+      ],
+      "ai_bom_note": "AISC component detection is NOT retrievable through the CxMCP listFindings API - no aisc-typed result appears at any severity tier. AI-BOM evidence therefore comes from the CycloneDX export path, as validated separately in CH-A1 where AISC detected 7 of 10 declared components. Reported to Checkmarx as an API gap."
+    },
+    {
+      "id": "CH-108",
+      "name": "Defence-in-Depth Erosion to Credentialed Session Ride",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "PHP",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "cx-andy-schmit/dvwa",
+        "scan_id": "c389b5e7-34fc-4be6-821b-59cd647c7f0b",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding was read out of this completed scan with the severity Checkmarx assigned. Finding IDs are re-checkable via CxMCP getFindingDetails."
+      },
+      "real_world_anchor": "The pattern behind long-lived compromise of admin interfaces, where no single control failure is dramatic but the combination leaves no barrier standing.",
+      "terminal_outcome": "An attacker rides an authenticated administrator session and reads back database internals. CSRF protection is absent on state-changing endpoints (F1), sensitive database information is reachable by an unauthorised actor (F2), HSTS is never set so the session can be observed after a downgrade (F3), exceptions are handled improperly on the login path (F4), and error messages return query-level detail (F5).",
+      "expected_chain_cps": 9.24,
+      "required_findings": [
+        {
+          "query_name": "CSRF",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/vulnerabilities/captcha/source/low.php",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "4BCo3G3gAni7aAzcVLnCbb++xpg=",
+          "evidence_location": "/vulnerabilities/captcha/source/low.php:50"
+        },
+        {
+          "query_name": "Exposure of Sensitive Information to an Unauthorized Actor",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/dvwa/includes/DBMS/MySQL.php",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "3/YbcHdUmUIGhxgUr09l+gcwZ+Q=",
+          "evidence_location": "/dvwa/includes/DBMS/MySQL.php:88"
+        },
+        {
+          "query_name": "Missing_HSTS_Header",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/dvwa/includes/dvwaPage.inc.php",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "2W4LMHcT/vSld6tCtqrQExOCVcU=",
+          "evidence_location": "/dvwa/includes/dvwaPage.inc.php:305"
+        },
+        {
+          "query_name": "Improper_Exception_Handling",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/login.php",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "d77SUqnw0wzXqYjeIVARjEytQPI=",
+          "evidence_location": "/login.php:40"
+        },
+        {
+          "query_name": "Information_Exposure_Through_an_Error_Message",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "/vulnerabilities/sqli/source/low.php",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "EdyXCoeD22Z/MViCkGTdzWwMps8=",
+          "evidence_location": "/vulnerabilities/sqli/source/low.php:35"
+        }
+      ]
+    },
+    {
+      "id": "CH-109",
+      "name": "Cloud Exfiltration Blindness (Terraform / AWS)",
+      "engines": [
+        "IaC"
+      ],
+      "tech_stack": "Terraform / AWS",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "owasp-juice-lab",
+        "scan_id": "b0b1dcd6-4cdc-4a3e-bb66-f689ec8e4999",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding was read out of this completed scan with the severity Checkmarx assigned. Finding IDs are re-checkable via CxMCP getFindingDetails."
+      },
+      "real_world_anchor": "Cloud data-theft incidents where the exfiltration itself was permitted by policy and no telemetry existed to reconstruct it afterwards.",
+      "terminal_outcome": "Data exfiltration from managed data stores with no forensic trail and no clean recovery point. An IAM policy permits the exfiltration operations outright (F1); S3 access logging is disabled (F2) and RDS logging is disabled (F3), so neither the staging nor the extraction is recorded; RDS backups are disabled (F4), removing the recovery point that would bound the damage; and workloads run in an unrecommended namespace (F5), widening the blast radius of any compromised pod. Every finding is Medium. The composite is a breach that cannot be detected, reconstructed, or cleanly recovered from.",
+      "expected_chain_cps": 8.32,
+      "required_findings": [
+        {
+          "query_name": "IAM policy allows for data exfiltration",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "terraform",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "+cWUkE7MhVo3DkGLtob6BXUj170=",
+          "evidence_location": "terraform"
+        },
+        {
+          "query_name": "S3 Bucket Logging Disabled",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "terraform",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "WJLKWg3/3bbFGgwtObNBALFUr80=",
+          "evidence_location": "terraform"
+        },
+        {
+          "query_name": "RDS Without Logging",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "terraform",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "4ExYdis3eWtB5PiJRYcz0Tdyk84=",
+          "evidence_location": "terraform"
+        },
+        {
+          "query_name": "RDS With Backup Disabled",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "terraform",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "h/70jVGCxBzxMlBzM360MISgzp4=",
+          "evidence_location": "terraform"
+        },
+        {
+          "query_name": "Using Unrecommended Namespace",
+          "engine": "IaC",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L1_Signal",
+          "expected_file_glob": "kubernetes",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "Ojwf0eSDnF/hKou1A1UO7S4L3/c=",
+          "evidence_location": "kubernetes"
+        }
+      ]
+    },
+    {
+      "id": "CH-110",
+      "name": "API Auth Weakening to Token Forgery",
+      "engines": [
+        "SAST"
+      ],
+      "tech_stack": "Go",
+      "validation": {
+        "mode": "observed",
+        "tenant": "checkmarx-global-services-internal",
+        "project": "cx-jeremy-polansky/authlab-canary",
+        "scan_id": "2e83d245-5417-4076-a24e-34622e6fd073",
+        "validated_on": "2026-08-01",
+        "note": "Every required finding was read out of this completed scan with the severity Checkmarx assigned. Finding IDs are re-checkable via CxMCP getFindingDetails."
+      },
+      "real_world_anchor": "Token-forgery chains against API gateways and auth services, where the signing weakness and the validation gap are separately triaged and separately deferred.",
+      "terminal_outcome": "Forgery of an authentication token accepted by the API. A hardcoded credential in the controller (F1) supplies key material, a weak client-side hash (F2) means the derived value is reproducible, and the JWT is accepted without validating its claims directives (F3) so a forged token with attacker-chosen claims passes verification. Two Mediums and a Low compose into authentication bypass.",
+      "expected_chain_cps": 8.01,
+      "required_findings": [
+        {
+          "query_name": "Use_of_Hardcoded_Password",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/app/controllers/app.go",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "0Bq5qFb+uLA1haKPGSpCur2jTAM=",
+          "evidence_location": "/app/controllers/app.go:213"
+        },
+        {
+          "query_name": "Client_Weak_Cryptographic_Hash",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Medium",
+          "cwe": 0,
+          "role": "L2_Bridge",
+          "expected_file_glob": "/public/js/clientside.js",
+          "severity_verification": "verified_medium",
+          "evidence_finding_id": "dDFtmyvQUkjW8MvNhYJFe1jcEMI=",
+          "evidence_location": "/public/js/clientside.js:113"
+        },
+        {
+          "query_name": "JWT_No_Claims_Directives_Validation",
+          "engine": "SAST",
+          "default_severity_in_catalog": "Low",
+          "cwe": 0,
+          "role": "L3_Amplifier",
+          "expected_file_glob": "/app/controllers/app.go",
+          "severity_verification": "verified_low",
+          "evidence_finding_id": "d8VLX0/ssa9zVdKaddCJrd6Lklo=",
+          "evidence_location": "/app/controllers/app.go:396"
+        }
+      ]
+    }
+  ]
+}

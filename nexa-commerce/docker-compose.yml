@@ -1,0 +1,58 @@
+# Nexa Commerce - local composition.
+#
+# CHAIN CH-105 lives in this file plus ops/seed/.
+# The container hardening omissions below are deliberate and each is rated
+# Medium by KICS.
+
+services:
+
+  storefront:
+    build: ./storefront
+    # CH-105 F4 - Container Traffic Not Bound To Host Interface (expect: Medium)
+    # Published on every host interface rather than 127.0.0.1, so the
+    # service is reachable from outside the host.
+    ports:
+      - "8080:8080"
+    # CH-105 F2 - Container Capabilities Unrestricted (expect: Medium)
+    # No cap_drop: ALL, and NET_ADMIN is added on top of the default set.
+    cap_add:
+      - NET_ADMIN
+    # CH-105 F3 - Security Opt Not Set (expect: Medium)
+    # No security_opt block, so neither seccomp nor AppArmor is pinned and
+    # the daemon default applies.
+    environment:
+      NEXA_ENV: local
+
+  catalog-service:
+    build: ./catalog-service
+    ports:
+      - "8084:8080"
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      JAVA_OPTS: "-Dnexa.catalog.pageSize=20"
+
+  web-gateway:
+    build: ./web-gateway
+    ports:
+      - "8081:8081"
+    environment:
+      NEXA_GATEWAY_PORT: "8081"
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8082:8082"
+
+  assistant-service:
+    build: ./assistant-service
+    ports:
+      - "8083:8083"
+    environment:
+      NEXA_ASSISTANT_PORT: "8083"
+
+  seed:
+    build: ./ops/seed
+    profiles: ["ops"]
+    environment:
+      NEXA_DB_HOST: catalog-db.internal

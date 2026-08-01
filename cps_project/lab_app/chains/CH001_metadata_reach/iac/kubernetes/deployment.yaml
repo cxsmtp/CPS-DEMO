@@ -1,0 +1,57 @@
+# LAB IaC ARTIFACT — Kubernetes manifest with deliberate Low misconfigurations
+# Targets Checkmarx IaC Security (KICS) Kubernetes rules. Not for `kubectl apply`.
+#
+# Each misconfiguration is marked LAB-IAC-VULN-CH001-K8S-N tying it to the
+# KICS rule it triggers.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ch01-lab
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ch01-lab-app
+  namespace: ch01-lab
+  # LAB-IAC-VULN-CH001-K8S-1: KICS Resource Without Labels (Informational)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ch01-lab-app
+  template:
+    metadata:
+      labels:
+        app: ch01-lab-app
+    spec:
+      # LAB-IAC-VULN-CH001-K8S-2: KICS Service Account Token Auto-Mount (Low)
+      automountServiceAccountToken: true
+      containers:
+      - name: lab-app
+        image: ch01-lab-app:0.1.0
+        ports:
+        - containerPort: 5050
+        # LAB-IAC-VULN-CH001-K8S-3: KICS Container CPU Limit Not Set (Low)
+        # LAB-IAC-VULN-CH001-K8S-4: KICS Container Memory Limit Not Set (Low)
+        # LAB-IAC-VULN-CH001-K8S-5: KICS Container No SecurityContext (Low)
+        # (no resources block, no securityContext block)
+        env:
+        - name: APP_ENV
+          value: "lab"
+        - name: CPS_LAB_ENVIRONMENT
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ch01-lab-svc
+  namespace: ch01-lab
+spec:
+  selector:
+    app: ch01-lab-app
+  ports:
+  - port: 80
+    targetPort: 5050
+  # LAB-IAC-VULN-CH001-K8S-6: KICS Service Without Selector Restriction (Informational)
+  type: ClusterIP

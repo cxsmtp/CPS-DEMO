@@ -1,0 +1,152 @@
+{
+  "_comment": "OBSERVED evidence extracted via CxMCP from completed scan 382c4fa6-5687-4b5a-8205-6ca91269c0fa of project 'cx-carolyn-yates/JavaVulnerableLab' in tenant checkmarx-global-services-internal on 2026-08-01. Every row below is a real finding with its real severity and finding ID. Not synthetic.",
+  "reportType": "Vulnerability Type",
+  "reportHeader": {
+    "projectName": "cx-carolyn-yates/JavaVulnerableLab",
+    "scanners": [
+      "SAST",
+      "IaC Security"
+    ]
+  },
+  "scanInformation": {
+    "scanId": "382c4fa6-5687-4b5a-8205-6ca91269c0fa",
+    "totalScannedLoc": 0,
+    "scannedLoc": 0,
+    "iacScannedLoc": 0
+  },
+  "scanResults": {
+    "totalResults": 10,
+    "severitiesBreakdown": [],
+    "resultsList": [
+      {
+        "queryName": "Information_Exposure_Through_Query_String",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java",
+            "destinationLine": 57,
+            "similarityId": "tgntZzrWo1jl7GbAn6d9U92okIU="
+          }
+        ]
+      },
+      {
+        "queryName": "Exposure of Sensitive Information to an Unauthorized Actor",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/src/main/webapp/ForgotPassword.jsp",
+            "destinationLine": 10,
+            "similarityId": "odE2Z3LeAPVEmVcBoqlnC+wBjkc="
+          }
+        ]
+      },
+      {
+        "queryName": "Privacy_Violation",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/XPathQuery.java",
+            "destinationLine": 50,
+            "similarityId": "qJaqS2qGP2h7Yg1/u45ItVUL1F0="
+          }
+        ]
+      },
+      {
+        "queryName": "Information_Exposure_Through_an_Error_Message",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/EmailCheck.java",
+            "destinationLine": 60,
+            "similarityId": "467161"
+          }
+        ]
+      },
+      {
+        "queryName": "Heap_Inspection",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/LoginValidator.java",
+            "destinationLine": 44,
+            "similarityId": "67831"
+          }
+        ]
+      },
+      {
+        "queryName": "External_Control_of_System_or_Config_Setting",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java",
+            "destinationLine": 57,
+            "similarityId": "117621"
+          }
+        ]
+      },
+      {
+        "queryName": "Parameter_Tampering",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/EmailCheck.java",
+            "destinationLine": 42,
+            "similarityId": "oLhf1Sa69rpDxNtxDtYOlWclNgs="
+          }
+        ]
+      },
+      {
+        "queryName": "Stored_Relative_Path_Traversal",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Medium",
+            "destinationFileName": "/src/main/webapp/vulnerability/sqli/download_id_union.jsp",
+            "destinationLine": 24,
+            "similarityId": "pCeSA+Se0EWYdLfztdcz5VMoa4s="
+          }
+        ]
+      },
+      {
+        "queryName": "Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/AddPage.java",
+            "destinationLine": 45,
+            "similarityId": "ppKpfm8TZs9xeAZbkQZ8YK2YDt4="
+          }
+        ]
+      },
+      {
+        "queryName": "Race_Condition",
+        "cweId": 0,
+        "vulnerabilities": [
+          {
+            "severity": "Low",
+            "destinationFileName": "/src/main/java/org/cysecurity/cspf/jvl/controller/Install.java",
+            "destinationLine": 59,
+            "similarityId": "MLft8mwUe92v5D6e6BOWNT+gC90="
+          }
+        ]
+      }
+    ]
+  },
+  "iacScanResults": {
+    "totalResults": 0,
+    "severitiesBreakdown": [],
+    "technology": []
+  },
+  "scaScanResults": {
+    "totalResults": 0,
+    "packages": []
+  }
+}

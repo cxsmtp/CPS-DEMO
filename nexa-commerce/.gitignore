@@ -1,0 +1,8 @@
+node_modules/
+target/
+__pycache__/
+*.pyc
+*.sqlite
+*.war
+nexa-results*.json
+.DS_Store
