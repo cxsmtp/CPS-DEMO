@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Nexa Mobile",
+    "slug": "nexa-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "nexamobile",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "com.nexa.mobile",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false
+        }
+      }
+    },
+    "android": {
+      "package": "com.nexa.mobile",
+      "usesCleartextTraffic": false,
+      "allowBackup": false
+    },
+    "extra": {
+      "apiBaseUrl": "https://api.nexa.example.com"
+    }
+  }
+}

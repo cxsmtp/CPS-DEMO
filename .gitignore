@@ -16,3 +16,6 @@ nexa-results*.json
 .DS_Store
 .idea/
 .vscode/
+
+# Expo build/runtime cache
+.expo/
