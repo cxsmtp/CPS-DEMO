@@ -1,0 +1,5 @@
+# Paths excluded from Checkmarx scanning.
+node_modules/
+**/node_modules/**
+.expo/
+dist/

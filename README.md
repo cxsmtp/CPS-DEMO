@@ -6,12 +6,17 @@ individual findings, so that a set of weaknesses each triaged as "won't fix
 this sprint" is surfaced when — composed — it reaches the High band on chain
 risk.
 
-It has two halves that are meant to be read together:
+It has three parts that are meant to be read together:
 
 | Directory | What it is |
 |---|---|
 | [`cps_project/`](cps_project/) | The **scoring engine**. Rubric, per-query dimension defaults, a Checkmarx result parser (Checkmarx One / SARIF / legacy JSON), the scorer, a CLI, the chain catalog + matcher, unit tests, and the evidence pack. |
 | [`nexa-commerce/`](nexa-commerce/) | The **specimen**. A small but real e-commerce app across seven technology stacks, built so that *no* application-code or IaC finding rates High or Critical, yet ten distinct vulnerability chains compose into the High band. |
+| [`nexa-mobile/`](nexa-mobile/) | The **control**. A small React Native storefront over the same catalog, written as ordinary production code with *nothing* seeded. It gives the scan a mobile surface whose findings are whatever a scanner genuinely finds. |
+
+`nexa-mobile/` is deliberately excluded from the chain catalog. Reading a
+planted specimen next to an unplanted one is the only way to tell what the
+scoring engine is reacting to.
 
 ## The point in one paragraph
 
