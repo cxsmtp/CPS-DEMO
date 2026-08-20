@@ -14,8 +14,8 @@ findings are whatever a scanner genuinely finds.
 
 | Piece | Choice |
 |---|---|
-| Runtime | React Native 0.74 on Expo SDK 51 |
-| Language | TypeScript 5.3, `strict` plus `noUncheckedIndexedAccess` |
+| Runtime | React Native 0.86 on Expo SDK 57, React 19 |
+| Language | TypeScript 5.9, `strict` plus `noUncheckedIndexedAccess` |
 | Navigation | `@react-navigation/native-stack` |
 | State | `useReducer` + context, no external store |
 | Cart persistence | AsyncStorage, revalidated on read |
@@ -100,6 +100,42 @@ rules, response parsing rejections, and address validation.
 
 ## Scanning
 
-The app is scanned as part of the repository-wide Checkmarx scan from the
-repo root. `node_modules/` is excluded via the root `.gitignore` and the
-scan's file filter.
+The app is scanned as part of the repository-wide Checkmarx scan. `node_modules/`
+is excluded via `.cxignore` and the root `.gitignore`.
+
+### What the first scan found, and what was done about it
+
+The initial pin was Expo SDK 51 / React Native 0.74. Checkmarx SCA flagged
+**CVE-2025-11953** against it — CVSS 9.8, CWE-78 OS command injection, in
+`@react-native-community/cli-server-api@13.6.9`, reached transitively through
+`react-native`. The Metro development server binds to external interfaces by
+default and exposes an endpoint that runs arbitrary executables for an
+unauthenticated caller on the same network.
+
+It is a development-time exposure rather than something that ships in the app
+bundle, which is exactly the shape of finding a severity-ordered backlog
+defers. It is also a remote code execution path on every developer machine
+running `npm start`, so it was fixed rather than deferred: the app moved to
+Expo SDK 57 / React Native 0.86 / React 19, which drops the
+`@react-native-community/cli` chain altogether. That took the tree from 1283
+packages to 737, and from 1 critical / 19 high to **0 critical / 8 high**.
+
+The 8 that remain are the Metro bundler chain (`metro`, `@expo/cli`,
+`@expo/metro-config`) reached through `expo` itself, all tracing to
+`image-size`, whose advisory has no fixed version at any Expo SDK. Nothing in
+this repository can pin them away; they are recorded here rather than hidden.
+
+### A known false positive
+
+Checkmarx SAST reports `Secret_Leak_in_Error_Messages` (Low) five times
+against `src/api/parse.ts`, at every `throw new TypeError(...)` that names the
+field it rejected.
+
+Those messages interpolate the *field name* and never the *field value* —
+`expected string at "priceCents"`, never the contents of `priceCents`. The
+names are hardcoded string literals at each call site, so no request or
+response data reaches the message. The finding is not real.
+
+It is deliberately left unsuppressed. This directory exists to show what a
+scanner reports on unplanted code, and a false positive is part of that
+picture; editing the code to quiet a heuristic would remove the evidence.
