@@ -125,6 +125,21 @@ The 8 that remain are the Metro bundler chain (`metro`, `@expo/cli`,
 `image-size`, whose advisory has no fixed version at any Expo SDK. Nothing in
 this repository can pin them away; they are recorded here rather than hidden.
 
+### Verified result
+
+A second scan after the upgrade (`64dd83a9`, SAST + SCA) confirms the fix:
+CVE-2025-11953 is absent, and across the whole repository the 1 remaining
+Critical and all 18 High findings are `RECURRENT` and live in
+`nexa-commerce/` or `cps_project/`. Enumerating every Critical, High and
+Medium finding in that scan gives, for `nexa-mobile/`:
+
+| Severity | Count in `nexa-mobile/` |
+|---|---|
+| Critical | 0 |
+| High | 0 |
+| Medium | 0 |
+| Low | 5 — all one query in one file, see below |
+
 ### A known false positive
 
 Checkmarx SAST reports `Secret_Leak_in_Error_Messages` (Low) five times
