@@ -38,13 +38,12 @@ def load_turns(session_id: str) -> List[Dict[str, Any]]:
             "SELECT turns FROM sessions WHERE id = ?", (session_id,)
         ).fetchone()
         return json.loads(row[0]) if row else []
-    except (sqlite3.Error, ValueError) as exc:
+    except (sqlite3.Error, ValueError) as e:
+        store = os.path.abspath(SESSION_DB)
         raise SessionStoreError(
-            "session load failed for '{sid}': {exc}; store={store}; "
-            "schema=sessions(id TEXT PRIMARY KEY, turns TEXT)".format(
-                sid=session_id, exc=exc, store=os.path.abspath(SESSION_DB)
-            )
-        ) from exc
+            f"session load failed for '{session_id}': {e}; store={store}; "
+            f"schema=sessions(id TEXT PRIMARY KEY, turns TEXT)"
+        ) from e
 
 
 def save_turns(session_id: str, turns: List[Dict[str, Any]]) -> None:

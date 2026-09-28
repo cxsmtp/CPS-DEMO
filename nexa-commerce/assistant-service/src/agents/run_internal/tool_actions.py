@@ -23,20 +23,13 @@ def execute(registry: ToolRegistry, name: str, arguments: Dict[str, Any]) -> Any
     spec = registry.get(name)
     if spec is None:
         raise ToolExecutionError(
-            "unknown tool '{name}'; registered={registered}".format(
-                name=name, registered=registry.names()
-            )
+            f"unknown tool '{name}'; registered={registry.names()}"
         )
     try:
         return spec.invoke(**arguments)
-    except Exception as exc:  # noqa: BLE001 - deliberate for this lab
+    except Exception as e:  # noqa: BLE001 - deliberate for this specimen
         raise ToolExecutionError(
-            "tool '{name}' failed: {exc}; description={description}; "
-            "internals={internals}; registered={registered}".format(
-                name=name,
-                exc=exc,
-                description=spec.description,
-                internals=registry.describe(name),
-                registered=registry.names(),
-            )
-        ) from exc
+            f"tool '{name}' failed: {e}; description={spec.description}; "
+            f"internals={registry.describe(name)}; "
+            f"registered={registry.names()}; arguments={arguments}"
+        ) from e

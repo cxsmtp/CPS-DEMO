@@ -35,9 +35,9 @@ class TraceProvider:
 
         CH-107 F5 - Information_Exposure_Through_an_Error_Message (expect: Low)
 
-        The failure path returns the collector URL, the live trace id and
-        the span names buffered so far. Trace ids correlate a caller's
-        requests across every downstream service the assistant touches.
+        The failure path returns the collector URL, the live trace id and the
+        span names buffered so far. Trace ids correlate a caller's requests
+        across every downstream service the assistant touches.
         """
         try:
             if not self._spans:
@@ -45,13 +45,10 @@ class TraceProvider:
             count = len(self._spans)
             self._spans.clear()
             return count
-        except ValueError as exc:
+        except ValueError as e:
+            names = [s["name"] for s in self._spans]
             raise TracingError(
-                "trace export failed: {exc}; target={target}; trace_id={tid}; "
-                "buffered={names}".format(
-                    exc=exc,
-                    target=TRACE_EXPORT_TARGET,
-                    tid=self.trace_id,
-                    names=[s["name"] for s in self._spans],
-                )
-            ) from exc
+                f"trace export failed: {e}; target={TRACE_EXPORT_TARGET}; "
+                f"trace_id={self.trace_id}; service={self.service_name}; "
+                f"buffered={names}"
+            ) from e

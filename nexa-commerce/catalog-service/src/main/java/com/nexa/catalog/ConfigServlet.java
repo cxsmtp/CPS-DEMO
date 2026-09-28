@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Operations endpoint used by the merchandising team to retune the
- * catalogue at runtime.
+ * Operations endpoint used by the merchandising team to retune the catalogue
+ * at runtime.
  *
  * CHAIN CH-103 begins here.
  */
@@ -28,9 +28,13 @@ public class ConfigServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         // CH-103 F2 - Parameter_Tampering (expect: Medium)
-        // The privilege applied to this call is taken from the request
-        // itself rather than from the authenticated session.
+        //
+        // The privilege and the price adjustment applied to this call are
+        // taken from the request itself rather than from the authenticated
+        // session, so the caller decides their own authorisation level.
         String role = request.getParameter("role");
+        String discountPercent = request.getParameter("discount_percent");
+
         boolean privileged = "merchandiser".equals(role) || "ops".equals(role);
         if (!privileged) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -45,13 +49,16 @@ public class ConfigServlet extends HttpServlet {
         if (pageSize != null) {
             System.setProperty("nexa.catalog.pageSize", pageSize);
         }
+        if (discountPercent != null) {
+            System.setProperty("nexa.catalog.discount", discountPercent);
+        }
 
-        String rebuild = request.getParameter("rebuild_report");
-        if ("1".equals(rebuild)) {
+        if ("1".equals(request.getParameter("rebuild_report"))) {
             ReportBuilder.writeReport("low-stock", "sku,on_hand\n");
         }
 
         out.print("{\"page_size\":\""
-                + System.getProperty("nexa.catalog.pageSize", "20") + "\"}");
+                + System.getProperty("nexa.catalog.pageSize", "20")
+                + "\",\"role\":\"" + role + "\"}");
     }
 }

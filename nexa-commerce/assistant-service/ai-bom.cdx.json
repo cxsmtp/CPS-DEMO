@@ -1,0 +1,65 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "nexa-shopping-assistant",
+      "description": "Nexa Commerce shopping assistant - AI agent surface"
+    },
+    "properties": [
+      { "name": "nexa:chain", "value": "NX-11 (AI-BOM), enriches NX-08" }
+    ]
+  },
+  "components": [
+    {
+      "type": "machine-learning-model",
+      "name": "gpt-4o",
+      "supplier": { "name": "OpenAI" },
+      "description": "Primary assistant model driving customer replies and tool calls.",
+      "properties": [
+        { "name": "nexa:role", "value": "primary-assistant" },
+        { "name": "nexa:invocation", "value": "chat.completions" },
+        { "name": "nexa:data-exposure", "value": "customer messages, catalogue, order status" }
+      ]
+    },
+    {
+      "type": "machine-learning-model",
+      "name": "gpt-4o-mini",
+      "supplier": { "name": "OpenAI" },
+      "description": "Intent classifier used to route customer queries before the primary model.",
+      "properties": [
+        { "name": "nexa:role", "value": "intent-classifier" }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "model-context-protocol",
+      "supplier": { "name": "Anthropic" },
+      "description": "MCP client transport used to reach the catalogue tool server.",
+      "properties": [
+        { "name": "nexa:role", "value": "tool-transport" },
+        { "name": "nexa:endpoint", "value": "http://catalog-mcp.internal:9200/mcp" }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "openai-python",
+      "version": "1.99.1",
+      "supplier": { "name": "OpenAI" },
+      "description": "Official OpenAI Python client used to invoke the models above."
+    }
+  ],
+  "services": [
+    {
+      "name": "openai-api",
+      "endpoints": [ "https://api.openai.com/v1/chat/completions" ],
+      "authenticated": true,
+      "x-trust-boundary": true,
+      "data": [
+        { "classification": "customer-content", "flow": "outbound" }
+      ]
+    }
+  ]
+}

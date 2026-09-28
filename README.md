@@ -1,79 +1,62 @@
-# CPS Demo — Chain Potential Score
+# CPS-DEMO — Chain Potential Score
 
-This repository is a self-contained demonstration of the **Chain Potential
-Score (CPS)** framework: a way of scoring vulnerability *chains* rather than
-individual findings, so that a set of weaknesses each triaged as "won't fix
-this sprint" is surfaced when — composed — it reaches the High band on chain
-risk.
+Research artefact for the **Chain Potential Score (CPS)**: a framework showing that
+individually low-severity findings compose into high-impact exploit chains, and
+that AI collapses the cost of composing them.
 
-It has two halves that are meant to be read together:
+Headline result: a working exploit chain built **entirely from Informational
+findings** scores in the High band on impact. A team would clear 554 higher-rated
+findings before the first constituent was even displayed.
 
-| Directory | What it is |
+## Layout
+
+| Path | What it is |
 |---|---|
-| [`cps_project/`](cps_project/) | The **scoring engine**. Rubric, per-query dimension defaults, a Checkmarx result parser (Checkmarx One / SARIF / legacy JSON), the scorer, a CLI, the chain catalog + matcher, unit tests, and the evidence pack. |
-| [`nexa-commerce/`](nexa-commerce/) | The **specimen**. A small but real e-commerce app across seven technology stacks, built so that *no* application-code or IaC finding rates High or Critical, yet ten distinct vulnerability chains compose into the High band. |
+| `nexa-commerce/` | **The specimen.** A working polyglot e-commerce app (PHP, Java, Node, Go, Python, Terraform, K8s, Docker) that reproduces 13 chains in one codebase with zero High or Critical findings from application code or IaC. v3 — carries SAST, SCA, IaC, secret-detection and AI-BOM surfaces. |
+| `cps_project/` | **The engine.** CPS scoring rubric, chain matcher, Checkmarx parser, chain catalogues, fixtures, workbook generators, 36 automated tests. |
+| `reports/` | **The workbooks.** Chain catalogue with attack paths, broader research catalogue, false-positive triage. |
+| `docs/` | **The write-ups.** Validated chains, scan evidence, chain map, runbooks, brief, LinkedIn drafts. |
 
-## The point in one paragraph
+## Start here
 
-Every constituent of every chain in `nexa-commerce/` sits at **Medium, Low or
-Informational** — the tiers a severity-ordered backlog defers. Taken finding by
-finding, each is something a security programme closes as low priority. Composed,
-each of the ten chains reaches the High band on chain risk. CH-106 is the extreme
-case: all five of its constituents are rated *Informational* (the tier below Low,
-which most programmes never even render in the backlog), and the chain still
-scores 9.15. See [`nexa-commerce/CHAIN_MAP.md`](nexa-commerce/CHAIN_MAP.md) for
-the finding-by-finding map and [`cps_project/SCAN_RESULTS_EVIDENCE.md`](cps_project/SCAN_RESULTS_EVIDENCE.md)
-for the evidence pack.
+- **`reports/Nexa_Commerce_Chains.xlsx`** — 13 chains, 60 findings across five engines, each with the detecting engine, vulnerability name, severity, file, result ID, and a step-by-step attack path.
+- **`docs/FINAL_TEN_CHAINS.md`** — the ten validated chains with full provenance.
+- **`docs/CHAIN_MAP.md`** — every finding mapped to its file and expected severity in the specimen.
 
-## Quick start
-
-Run the engine's unit tests:
+## Reproduce
 
 ```bash
-cd cps_project
-python -m pytest tests/ -q
+# Score and match chains against a Checkmarx export
+cd cps_project && python run_smoke_tests.py              # 36/36
+
+# Scan the specimen (all engines) and verify every chain
+cd nexa-commerce && ./scan.sh Nexa-Commerce main
+PYTHONPATH=../cps_project python verify_chains.py <export>.json
 ```
 
-Dry-run the chain verifier against the specimen using the expected-shape
-fixture (no Checkmarx scan required — this proves the harness and catalog are
-consistent, not that a scan will emit these findings):
+Full push-and-scan runbook: `docs/PUSH_AND_SCAN.md`.
 
-```bash
-cd nexa-commerce
-PYTHONPATH=../cps_project python3 verify_chains.py expected_scan_shape.json
-```
+## Method in one paragraph
 
-Expected output ends with:
+Findings are read out of *completed* Checkmarx One scans with the severity
+already assigned — no prediction step. Each is scored on five dimensions
+(Prevalence 0.15, Chain Utility 0.30, AI Leverage 0.25, Blast Radius 0.15,
+Impact Proximity 0.15), then a chain scores `max + 0.1 × sum(rest)`, capped at
+10. A guard test fails the build if any High or Critical enters a chain; a
+negative control confirms each fixture assembles only its own chains.
 
-```
-Chains fully assembled: 10 of 10
-No High or Critical findings present.
-```
+## Status
 
-Score a real Checkmarx export through the CLI:
+- Ten chains validated against real scans; the specimen scans clean of High/Critical.
+- Secrets, AI-BOM and SCA chains (NX-11..13) are coded in v3 and pending confirmation on the next scan.
+- Checkmarx project `CPS-DEMO` · id `d182f9ec-bb1e-40fb-9b79-12dbb96f7f1c`.
 
-```bash
-cd cps_project
-python -m cps_engine.cli sample_data/sample_checkmarx_export.json
-```
+## Five observations for Checkmarx
 
-## Verifying against a live scan
+1. Query severity is language-preset dependent.
+2. Query-name casing is unstable, even within one scan.
+3. Query names vary across presets for the same rule.
+4. `listFindings` engine/query filters are partly inert server-side.
+5. AISC / AI-BOM results are not exposed via `listFindings` — CycloneDX export only.
 
-Scan the specimen and run the verifier over the real export:
-
-```bash
-cd nexa-commerce
-./scan.sh Nexa-Commerce main
-cx results show --scan-id <SCAN_ID> --report-format json --output-name nexa-results
-PYTHONPATH=../cps_project python3 verify_chains.py nexa-results.json
-```
-
-The verifier reports, per chain, which required findings fired and at what
-severity, flags any severity drift from the catalog, and fails if any High or
-Critical finding is present.
-
-## A warning that should not need saying
-
-Every weakness in `nexa-commerce/` is intentional. Do not deploy it, do not
-lift code from it, and do not point it at anything you care about. It exists to
-be scanned.
+> Every weakness in `nexa-commerce/` is intentional. Do not deploy it.

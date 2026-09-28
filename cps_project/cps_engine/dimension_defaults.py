@@ -963,6 +963,15 @@ DEFAULTS: dict[str, DimensionScores] = {
         blast_radius=BlastRadius.LOW,
         impact_proximity=ImpactProximity.LOW,
     ),
+    "creation_of_temp_file_with_insecure_permissions": DimensionScores(  # Java: Low
+        # Name confirmed emitted by the tenant in scan cc434dd7 for the Nexa
+        # specimen; the longer variant below appears in other Java codebases.
+        prevalence=Prevalence.MEDIUM,
+        chain_utility=ChainUtility.HIGH,
+        ai_leverage=AILeverage.MEDIUM,
+        blast_radius=BlastRadius.MEDIUM,
+        impact_proximity=ImpactProximity.MEDIUM,
+    ),
     "creation_of_temp_file_in_dir_with_incorrect_permissions": DimensionScores(  # Java: Low
         prevalence=Prevalence.MEDIUM,
         chain_utility=ChainUtility.HIGH,

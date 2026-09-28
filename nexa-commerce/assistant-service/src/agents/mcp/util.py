@@ -18,18 +18,17 @@ def decode_envelope(raw: str, endpoint: str = DEFAULT_MCP_ENDPOINT) -> Dict[str,
     CH-107 F2 - Information_Exposure_Through_an_Error_Message (expect: Low)
 
     The failure path returns the endpoint the assistant is wired to, the
-    transport version it negotiated and the underlying decoder message.
-    That is enough for a caller to map the agent's MCP topology without
-    ever authenticating to it.
+    negotiated transport capabilities and the underlying decoder message.
+    That is enough to map the agent's MCP topology without authenticating.
     """
     try:
         return json.loads(raw)
-    except ValueError as exc:
+    except ValueError as e:
         raise McpTransportError(
-            "mcp envelope decode failed: {exc}; endpoint={endpoint}; "
-            "transport=jsonrpc-2.0; negotiated_capabilities=tools,resources,prompts"
-            .format(exc=exc, endpoint=endpoint)
-        ) from exc
+            f"mcp envelope decode failed: {e}; endpoint={endpoint}; "
+            f"transport=jsonrpc-2.0; "
+            f"negotiated_capabilities=tools,resources,prompts; payload={raw}"
+        ) from e
 
 
 def summarise_tools(envelope: Dict[str, Any]) -> list[str]:
