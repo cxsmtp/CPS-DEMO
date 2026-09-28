@@ -28,11 +28,11 @@ project.
 
 | # | Query | Sev | File |
 |---|---|---|---|
-| F1 | `Use of Insufficiently Random Values` | Medium | `storefront/public/lib/session.php` → `nexa_new_session_id()` |
-| F2 | `Broken_or_Risky_Hashing_Function` | Medium | `storefront/public/lib/session.php` → `nexa_sign_session()` |
-| F3 | `Insecure_Value_of_the_SameSite_Cookie_Attribute` | Medium | `storefront/public/lib/session.php` → `nexa_issue_session()` |
-| F4 | `Cookie_Overly_Broad_Path` | Low | `storefront/public/lib/session.php` → `nexa_issue_session()` |
-| F5 | `Use_of_Non_Cryptographic_Random` | Low | `storefront/public/lib/session.php` → `nexa_new_session_id()` |
+| F1 | `Use of Insufficiently Random Values` | Medium | `storefront/public/login.php` → session-id generation |
+| F2 | `Broken_or_Risky_Hashing_Function` | Medium | `storefront/public/login.php` → session signing |
+| F3 | `Insecure_Value_of_the_SameSite_Cookie_Attribute` | Medium | `storefront/public/login.php` → `setcookie()` |
+| F4 | `Cookie_Overly_Broad_Path` | Low | `storefront/public/login.php` → `setcookie()` |
+| F5 | `Use_of_Non_Cryptographic_Random` | Low | `storefront/public/login.php` → session-id generation |
 
 Mersenne Twister seeded from `time()` produces the session id; md5 signs it;
 the cookie ships `SameSite=None` with `Path=/`. Enumerate, forge, deliver
@@ -42,8 +42,8 @@ cross-site, ride the session site-wide.
 
 | # | Query | Sev | File |
 |---|---|---|---|
-| F1 | `Information_Exposure_Through_Query_String` | Medium | `CatalogServlet.java` → `buildContinueUrl()` |
-| F2 | `Exposure of Sensitive Information to an Unauthorized Actor` | Medium | `AccountServlet.java` → `billingSummary()` |
+| F1 | `Information_Exposure_Through_Query_String` | Medium | `CatalogServlet.java` → `doGet()` |
+| F2 | `Exposure of Sensitive Information to an Unauthorized Actor` | Medium | `AccountServlet.java` → `doPost()` response body |
 | F3 | `Privacy_Violation` | Medium | `AccountServlet.java` → `doPost()` log line |
 | F4 | `Information_Exposure_Through_an_Error_Message` | Low | `CatalogServlet.java` → `printStackTrace(out)` |
 | F5 | `Heap_Inspection` | Low | `AccountServlet.java` → `lastPassphrase` field |
@@ -55,10 +55,10 @@ cross-site, ride the session site-wide.
 | F1 | `External_Control_of_System_or_Config_Setting` | Medium | `ConfigServlet.java` → `System.setProperty()` |
 | F2 | `Parameter_Tampering` | Medium | `ConfigServlet.java` → role from request |
 | F3 | `Stored_Relative_Path_Traversal` | Medium | `ReportBuilder.java` → `reportTarget()` |
-| F4 | `Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions` | Low | `ReportBuilder.java` → `createTempFile()` |
+| F4 | `Creation_of_Temp_File_With_Insecure_Permissions` | Low | `ReportBuilder.java` → `createTempFile()` |
 | F5 | `Race_Condition` | Low | `ReportBuilder.java` → exists/delete/write |
 
-The traversal source is `catalog-settings.properties`, not the request. That
+The traversal source is the `settings` table (`report.dir`), not the request. That
 is deliberate: the stored variant is Medium, direct request traversal is High.
 
 ## CH-104 — Redirect to Token Theft (Node)
@@ -66,8 +66,8 @@ is deliberate: the stored variant is Medium, direct request traversal is High.
 | # | Query | Sev | File |
 |---|---|---|---|
 | F1 | `Open_Redirect` | Medium | `web-gateway/src/server.js` → `completeSignIn()` |
-| F2 | `Missing_HSTS_Header` | Medium | `web-gateway/src/server.js` → `applySecurityHeaders()` |
-| F3 | `Missing_CSP_Header` | Low | `web-gateway/src/server.js` → `applySecurityHeaders()` |
+| F2 | `Missing_HSTS_Header` | Medium | `web-gateway/src/server.js` → `sendHtml()` |
+| F3 | `Missing_CSP_Header` | Low | `web-gateway/src/server.js` → `sendHtml()` |
 | F4 | `Unsafe_Use_Of_Target_blank` | Low | `web-gateway/src/views/product.html` |
 | F5 | `Log_Forging` | Low | `web-gateway/src/server.js` → `auditRequest()` |
 
@@ -117,10 +117,10 @@ GPT-4o, GPT-4o-mini, and the MCP transport.
 | # | Query | Sev | File |
 |---|---|---|---|
 | F1 | `CSRF` | Medium | `storefront/public/checkout.php` |
-| F2 | `Exposure of Sensitive Information to an Unauthorized Actor` | Medium | `storefront/public/lib/db.php` |
-| F3 | `Missing_HSTS_Header` | Medium | `storefront/public/lib/page.php` |
-| F4 | `Improper_Exception_Handling` | Low | `storefront/public/lib/db.php` |
-| F5 | `Information_Exposure_Through_an_Error_Message` | Low | `storefront/public/lib/db.php` |
+| F2 | `Exposure of Sensitive Information to an Unauthorized Actor` | Medium | `storefront/public/checkout.php` |
+| F3 | `Missing_HSTS_Header` | Medium | `storefront/public/checkout.php` |
+| F4 | `Improper_Exception_Handling` | Low | `storefront/public/checkout.php` |
+| F5 | `Information_Exposure_Through_an_Error_Message` | Low | `storefront/public/checkout.php` |
 
 ## CH-109 — Cloud Exfiltration Blindness (Terraform / K8s)
 
@@ -139,7 +139,7 @@ protection are all switched **on** — those omissions would rate High.
 
 | # | Query | Sev | File |
 |---|---|---|---|
-| F1 | `Use_of_Hardcoded_Password` | Medium | `auth-service/main.go` → `serviceAccountPassphrase` |
+| F1 | `Use_of_Hardcoded_Password` | Medium | `auth-service/main.go` → `serviceAccountPassword` |
 | F2 | `Client_Weak_Cryptographic_Hash` | Medium | `auth-service/public/js/checkout.js` → `sha1Hex()` |
 | F3 | `JWT_No_Claims_Directives_Validation` | Low | `auth-service/main.go` → `parseJWTClaims()` |
 
