@@ -4,3 +4,8 @@ node_modules/
 target/
 **/target/**
 .git/
+
+# Research tooling - not part of the specimen application.
+verify_chains.py
+expected_scan_shape.json
+chains_index_nexa.json

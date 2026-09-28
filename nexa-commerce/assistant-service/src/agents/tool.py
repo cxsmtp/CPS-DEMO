@@ -44,17 +44,23 @@ class ToolRegistry:
 
         CH-107 F1 - Object_Access_Violation (expect: Medium)
 
-        The override is written straight into the target object's __dict__,
-        bypassing the class's own accessors and its encapsulation entirely.
-        Private attributes such as _handler and _last_arguments are writable
-        from outside the object, so anything holding a reference to the
-        registry can rewrite what a named tool actually executes.
+        The override loop walks the target object's own __dict__ and writes
+        each attribute back with setattr, bypassing the class's accessors and
+        its encapsulation entirely. Private attributes such as _handler and
+        _last_arguments are writable from outside the object, so anything
+        holding a reference to the registry can rewrite what a named tool
+        actually executes.
         """
         spec = self._tools.get(name)
         if spec is None:
             return None
-        for key, value in overrides.items():
-            spec.__dict__[key] = value
+        for attr_name, attr_value in spec.__dict__.items():
+            if attr_name in overrides:
+                setattr(spec, attr_name, overrides[attr_name])
+            else:
+                setattr(spec, attr_name, getattr(spec, attr_name))
+        for attr_name, attr_value in overrides.items():
+            setattr(spec, attr_name, attr_value)
         return spec
 
     def describe(self, name: str) -> Dict[str, Any]:

@@ -1,72 +1,81 @@
 // Nexa Commerce - auth service.
 //
 // CHAIN CH-110 lives in this file plus public/js/checkout.js.
+//
+// FIX (scan cc434dd7): the previous revision called server.ListenAndServe(),
+// which Checkmarx flags as Plain_Text_Transport_Layer_in_Server at HIGH. The
+// listener is now TLS. Every finding in this specimen must stay at Medium or
+// below, so the transport itself has to be sound.
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 )
+
+const listenAddr = "0.0.0.0:8082"
 
 // CH-110 F1 - Use_of_Hardcoded_Password (expect: Medium)
 //
 // The service account passphrase used to derive the token signing key is
-// compiled into the binary, so anyone with the artefact has the key
-// material. It is also the value the client-side hash in
-// public/js/checkout.js reproduces.
-const serviceAccountPassphrase = "nexa-auth-service-passphrase-2026"
+// compiled into the binary and compared directly against caller-supplied
+// input, so anyone with the artefact holds the key material. It is also the
+// value the client-side digest in public/js/checkout.js reproduces.
+var serviceAccountPassword = "nexa-auth-service-passphrase-2026"
 
-const listenAddr = "0.0.0.0:8082"
-
-type claims struct {
-	Subject string `json:"sub"`
-	Role    string `json:"role"`
-	Expires int64  `json:"exp"`
-	Issuer  string `json:"iss"`
+func authenticateService(suppliedPassword string) bool {
+	return suppliedPassword == serviceAccountPassword
 }
 
-// parseJWTClaims decodes the payload segment of a JWT.
+func signingKey() []byte {
+	return []byte(serviceAccountPassword)
+}
+
+// parseJWTClaims parses a bearer token.
 //
 // CH-110 F3 - JWT_No_Claims_Directives_Validation (expect: Low)
 //
-// The payload is decoded and returned without checking exp, iss, aud or
-// nbf. Combined with the hardcoded passphrase above and the reproducible
-// client-side digest, a forged token with attacker-chosen claims is
-// accepted for as long as the caller cares to use it.
-func parseJWTClaims(token string) (*claims, error) {
-	segments := strings.Split(token, ".")
-	if len(segments) != 3 {
-		return nil, fmt.Errorf("malformed token")
-	}
-	payload, err := base64.RawURLEncoding.DecodeString(segments[1])
+// The parser is constructed with no claims directives: no expiry check, no
+// issuer check, no audience check, and no algorithm allow-list beyond the
+// default. Combined with the hardcoded key above and the reproducible
+// client-side digest, a forged token with attacker-chosen claims is accepted
+// for as long as the caller cares to use it.
+func parseJWTClaims(tokenString string) (jwt.MapClaims, error) {
+	claims := jwt.MapClaims{}
+	parser := jwt.NewParser()
+	_, err := parser.ParseWithClaims(tokenString, claims,
+		func(token *jwt.Token) (interface{}, error) {
+			return signingKey(), nil
+		})
 	if err != nil {
-		return nil, fmt.Errorf("malformed payload")
+		return nil, err
 	}
-	var c claims
-	if err := json.Unmarshal(payload, &c); err != nil {
-		return nil, fmt.Errorf("unreadable payload")
-	}
-	// No expiry check, no issuer check, no audience check.
-	return &c, nil
+	return claims, nil
 }
 
 func handleIntrospect(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	authorization := r.Header.Get("Authorization")
-	token := strings.TrimPrefix(authorization, "Bearer ")
+	if !authenticateService(r.Header.Get("X-Service-Password")) {
+		w.WriteHeader(http.StatusForbidden)
+		_, _ = w.Write([]byte(`{"active":false,"error":"service auth failed"}`))
+		return
+	}
+
+	token := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
 	if token == "" {
 		w.WriteHeader(http.StatusUnauthorized)
 		_, _ = w.Write([]byte(`{"active":false}`))
 		return
 	}
 
-	c, err := parseJWTClaims(token)
+	claims, err := parseJWTClaims(token)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		_, _ = w.Write([]byte(`{"active":false,"error":"unreadable token"}`))
@@ -75,9 +84,9 @@ func handleIntrospect(w http.ResponseWriter, r *http.Request) {
 
 	out, _ := json.Marshal(map[string]any{
 		"active": true,
-		"sub":    c.Subject,
-		"role":   c.Role,
-		"iss":    c.Issuer,
+		"sub":    claims["sub"],
+		"role":   claims["role"],
+		"iss":    claims["iss"],
 	})
 	_, _ = w.Write(out)
 }
@@ -99,9 +108,17 @@ func main() {
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	log.Printf("[auth] listening on %s (key derived from service passphrase, len=%d)",
-		listenAddr, len(serviceAccountPassphrase))
-	if err := server.ListenAndServe(); err != nil {
+	certFile := os.Getenv("NEXA_TLS_CERT")
+	keyFile := os.Getenv("NEXA_TLS_KEY")
+	if certFile == "" {
+		certFile = "certs/server.crt"
+	}
+	if keyFile == "" {
+		keyFile = "certs/server.key"
+	}
+
+	log.Printf("[auth] listening on %s over TLS", listenAddr)
+	if err := server.ListenAndServeTLS(certFile, keyFile); err != nil {
 		log.Fatalf("[auth] server stopped: %v", err)
 	}
 }

@@ -1,6 +1,15 @@
-# Nexa Commerce shopping assistant.
+# Nexa Commerce shopping assistant - Python dependencies.
 #
-# Deliberately minimal. openai is the only third-party package; everything
-# else is standard library. Pinned to a current release so the SCA surface
-# carries no High or Critical advisory.
+# SCA chain surface (NX-13). These two packages are pinned to versions that
+# carry Medium-severity advisories in the Checkmarx tenant. They are real,
+# installable releases - not fabricated - and both rate Medium (CVSS 5.x),
+# never High, so the specimen's no-High constraint holds.
+#
+#   Jinja2 3.0.1  -> CVE-2024-56326  CVSS 5.4 Medium  (sandbox str.format escape)
+#   requests 2.25.1 -> CVE-2024-35195 CVSS 5.6 Medium (Session verify=False sticky)
+#
+# openai is the model client (also the AI-BOM surface). Pinned to a current
+# release so it contributes no High/Critical advisory of its own.
 openai==1.99.1
+Jinja2==3.0.1
+requests==2.25.1

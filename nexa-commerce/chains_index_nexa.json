@@ -12,7 +12,7 @@
       "validation": {
         "mode": "expected",
         "codebase": "nexa-commerce",
-        "location": "storefront/public/lib/session.php",
+        "location": "storefront/public/login.php",
         "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
       },
       "real_world_anchor": "Session-prediction chains of the class seen repeatedly in PHP applications that roll their own session identifiers rather than using the platform session handler.",
@@ -25,7 +25,7 @@
           "default_severity_in_catalog": "Medium",
           "cwe": 0,
           "role": "L2_Bridge",
-          "expected_file_glob": "storefront/public/lib/session.php",
+          "expected_file_glob": "storefront/public/login.php",
           "severity_verification": "verified_medium",
           "notes": "PHP preset rates this Medium. The same query is rated Low in the JavaScript preset - severity is preset-dependent.",
           "match_file_contains": "storefront"
@@ -36,7 +36,7 @@
           "default_severity_in_catalog": "Medium",
           "cwe": 0,
           "role": "L2_Bridge",
-          "expected_file_glob": "storefront/public/lib/session.php",
+          "expected_file_glob": "storefront/public/login.php",
           "severity_verification": "verified_medium",
           "match_file_contains": "storefront"
         },
@@ -46,7 +46,7 @@
           "default_severity_in_catalog": "Medium",
           "cwe": 0,
           "role": "L3_Amplifier",
-          "expected_file_glob": "storefront/public/lib/session.php",
+          "expected_file_glob": "storefront/public/login.php",
           "severity_verification": "verified_medium",
           "match_file_contains": "storefront"
         },
@@ -56,7 +56,7 @@
           "default_severity_in_catalog": "Low",
           "cwe": 0,
           "role": "L3_Amplifier",
-          "expected_file_glob": "storefront/public/lib/session.php",
+          "expected_file_glob": "storefront/public/login.php",
           "severity_verification": "verified_low",
           "match_file_contains": "storefront"
         },
@@ -66,7 +66,7 @@
           "default_severity_in_catalog": "Low",
           "cwe": 0,
           "role": "L1_Signal",
-          "expected_file_glob": "storefront/public/lib/session.php",
+          "expected_file_glob": "storefront/public/login.php",
           "severity_verification": "verified_low",
           "match_file_contains": "storefront"
         }
@@ -189,14 +189,15 @@
           "match_file_contains": "catalog-service"
         },
         {
-          "query_name": "Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions",
+          "query_name": "Creation_of_Temp_File_With_Insecure_Permissions",
           "engine": "SAST",
           "default_severity_in_catalog": "Low",
           "cwe": 0,
           "role": "L3_Amplifier",
           "expected_file_glob": "catalog-service/src/main/java/com/nexa/catalog/",
           "severity_verification": "verified_low",
-          "match_file_contains": "catalog-service"
+          "match_file_contains": "catalog-service",
+          "notes": "Query name corrected from Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions after scan cc434dd7; this tenant emits the shorter form for the Java preset."
         },
         {
           "query_name": "Race_Condition",
@@ -513,7 +514,7 @@
       "validation": {
         "mode": "expected",
         "codebase": "nexa-commerce",
-        "location": "storefront/public/",
+        "location": "storefront/public/checkout.php",
         "note": "Severities were verified against real Checkmarx One scans before this codebase was written; see chains_index.json for the observed evidence and finding IDs. This entry is the expectation for a scan of the Nexa Commerce repository."
       },
       "real_world_anchor": "The pattern behind long-lived compromise of admin interfaces, where no single control failure is dramatic but the combination leaves no barrier standing.",
@@ -526,7 +527,7 @@
           "default_severity_in_catalog": "Medium",
           "cwe": 0,
           "role": "L2_Bridge",
-          "expected_file_glob": "storefront/public/",
+          "expected_file_glob": "storefront/public/checkout.php",
           "severity_verification": "verified_medium",
           "match_file_contains": "storefront"
         },
@@ -536,7 +537,7 @@
           "default_severity_in_catalog": "Medium",
           "cwe": 0,
           "role": "L2_Bridge",
-          "expected_file_glob": "storefront/public/",
+          "expected_file_glob": "storefront/public/checkout.php",
           "severity_verification": "verified_medium",
           "match_file_contains": "storefront"
         },
@@ -546,7 +547,7 @@
           "default_severity_in_catalog": "Medium",
           "cwe": 0,
           "role": "L3_Amplifier",
-          "expected_file_glob": "storefront/public/",
+          "expected_file_glob": "storefront/public/checkout.php",
           "severity_verification": "verified_medium",
           "match_file_contains": "storefront"
         },
@@ -556,7 +557,7 @@
           "default_severity_in_catalog": "Low",
           "cwe": 0,
           "role": "L1_Signal",
-          "expected_file_glob": "storefront/public/",
+          "expected_file_glob": "storefront/public/checkout.php",
           "severity_verification": "verified_low",
           "match_file_contains": "storefront"
         },
@@ -566,7 +567,7 @@
           "default_severity_in_catalog": "Low",
           "cwe": 0,
           "role": "L1_Signal",
-          "expected_file_glob": "storefront/public/",
+          "expected_file_glob": "storefront/public/checkout.php",
           "severity_verification": "verified_low",
           "match_file_contains": "storefront"
         }

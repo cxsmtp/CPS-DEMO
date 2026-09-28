@@ -175,7 +175,7 @@
         ]
       },
       {
-        "queryName": "Creation_of_Temp_File_in_Dir_with_Incorrect_Permissions",
+        "queryName": "Creation_of_Temp_File_With_Insecure_Permissions",
         "cweId": 0,
         "vulnerabilities": [
           {
